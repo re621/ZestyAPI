@@ -42,7 +42,6 @@ export default class RequestQueue {
                 Logger.connect(currentTask.request.url);
                 const response = await wfFetch(currentTask.request as any);
                 const data = await response.json();
-                Logger.log(data);
                 currentTask.success(data);
             } catch (error) { currentTask.failure(error); }
             await Util.sleep(currentTask.timeout);

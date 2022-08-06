@@ -31,7 +31,6 @@ export default class PostEndpoint extends Endpoint {
         return this.api.makeRequest(`posts/${id}.json`)
             .then(
                 (data) => {
-                    console.log(data);
                     if (!data.post || data.success == false) return null;
                     return data.post;
                 },
