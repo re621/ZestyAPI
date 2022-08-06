@@ -9,14 +9,20 @@ export default class PostEndpoint extends Endpoint {
         super(api);
     }
 
-    public find(tags?: string | string[], limit?: number): Promise<any> {
+    public find(tags?: string | string[], limit?: number, page?: number): Promise<any> {
         if (typeof tags == "string")
             tags = tags.trim().split(" ").filter(n => n);
         else if (tags == null || typeof tags == "undefined") tags = [];
         else if (typeof tags !== "object") tags = [tags + ""];
         else if (!Array.isArray(tags)) return Promise.resolve([]); // TODO Standardize error output
 
-        return this.api.makeRequest("posts.json", { query: { tags: Util.encodeArray(tags).join("+"), limit: limit ? limit : undefined } })
+        return this.api.makeRequest("posts.json", {
+            query: {
+                tags: Util.encodeArray(tags).join("+"),
+                limit: limit ? limit : undefined,
+                page: page ? page : undefined,
+            }
+        })
             .then(
                 (data) => {
                     return data.posts ? data.posts : [];
@@ -26,12 +32,24 @@ export default class PostEndpoint extends Endpoint {
     }
 
     public get(id: number): Promise<APIPost> {
-        if (typeof id != "number") return Promise.resolve(null);
+        if (typeof id != "number") return Promise.resolve(null); // TODO Standardize error output
 
         return this.api.makeRequest(`posts/${id}.json`)
             .then(
                 (data) => {
-                    if (!data.post || data.success == false) return null;
+                    if (!data.post || data.success == false) return {};
+                    return data.post;
+                },
+                (error) => { throw error; }
+            );
+    }
+
+    public random(): Promise<APIPost> {
+
+        return this.api.makeRequest(`posts/random.json`)
+            .then(
+                (data) => {
+                    if (!data.post || data.success == false) return {};
                     return data.post;
                 },
                 (error) => { throw error; }
