@@ -1,6 +1,6 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
-import Util from "./components/Util";
+import Util, { PrimitiveType } from "./components/Util";
 import PostEndpoint from "./endpoints/Post";
 import UserEndpoint from "./endpoints/User";
 import { MalformedConfigError } from "./error/InitializationError";
@@ -140,14 +140,14 @@ interface RequestConfig {
 }
 
 export interface APIQuery {
-    [prop: string]: string;
+    [prop: string]: PrimitiveType;
 }
 namespace APIQuery {
     export function flatten(input: APIQuery): string[] {
         const result = [];
         for (const [key, value] of Object.entries(input)) {
-            if (value == null || value == undefined) continue;
-            result.push(key + "=" + value);
+            if (value == null || typeof value == "undefined") continue;
+            result.push(key + "=" + value); // TODO URLEncode???
         }
         return result;
     }

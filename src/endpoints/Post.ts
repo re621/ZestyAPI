@@ -9,14 +9,14 @@ export default class PostEndpoint extends Endpoint {
         super(api);
     }
 
-    public find(tags: string | string[], limit?: number): Promise<any> {
+    public find(tags?: string | string[], limit?: number): Promise<any> {
         if (typeof tags == "string")
             tags = tags.trim().split(" ").filter(n => n);
-        else if (tags == null || typeof tags == "undefined") return Promise.resolve([]);
+        else if (tags == null || typeof tags == "undefined") tags = [];
         else if (typeof tags !== "object") tags = [tags + ""];
         else if (!Array.isArray(tags)) return Promise.resolve([]); // TODO Standardize error output
 
-        return this.api.makeRequest("posts.json", { query: { tags: Util.encodeArray(tags).join("+") } })
+        return this.api.makeRequest("posts.json", { query: { tags: Util.encodeArray(tags).join("+"), limit: limit ? limit : undefined } })
             .then(
                 (data) => {
                     return data.posts ? data.posts : [];
