@@ -30,8 +30,14 @@ export default class UserEndpoint extends Endpoint {
     }
 
     public isAuthenticated(): Promise<boolean> {
+        const auth = {
+            username: "username",
+        }
+        /*
+        TODO Fix this
         const auth = this.api.getAuthLogin();
         if (!auth || !auth.apiKey || !auth.username) return Promise.resolve(false);
+        */
 
         return this.api.makeRequest(`users/${auth.username}.json`).then(
             (data) => {

@@ -1,15 +1,17 @@
-import { ConfigException, InvalidUserAgent } from "./components/Exception";
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util from "./components/Util";
 import PostEndpoint from "./endpoints/Post";
 import UserEndpoint from "./endpoints/User";
+import { MalformedConfigError } from "./error/InitializationError";
 
 export default class E621 {
 
+    private static instance: E621;
+
     private userAgent: string;
-    private defaultTimeout = 500;
-    private domain = "https://e621.net";
+    private rateLimit: number;
+    private domain: string;
 
     private authToken: AuthToken;
     private authLogin: AuthLogin;
@@ -18,25 +20,46 @@ export default class E621 {
     public Posts = new PostEndpoint(this);
     public Users = new UserEndpoint(this);
 
-    constructor(config: APIConfig) {
-        if (!config) throw new ConfigException;
+    private constructor(config: APIConfig) {
+        // User Agent
+        if (!config.userAgent || typeof config.userAgent !== "string" || config.userAgent.length > 250)
+            throw MalformedConfigError.UserAgent();
+        else this.userAgent = config.userAgent;
 
-        this.userAgent = config.userAgent;
-        if (!this.userAgent) throw new InvalidUserAgent;
+        // Rate Limit
+        if (!config.rateLimit || typeof config.rateLimit !== "number" || config.rateLimit < 500)
+            this.rateLimit == 500;
+        else this.rateLimit = config.rateLimit;
 
-        if (config.defaultTimeout)
-            this.defaultTimeout = config.defaultTimeout >= 500 ? config.defaultTimeout : 500;
-        if (config.domain) this.domain = config.domain;
+        // Domain
+        if (!config.domain) config.domain = "https://e621.net";
+        else if (typeof config.domain !== "string")
+            throw MalformedConfigError.Domain();
+        try { this.domain = new URL(config.domain).href; }
+        catch { throw MalformedConfigError.Domain(); }
 
-        if (config.authToken) this.authToken = config.authToken;
-        if (config.authLogin) this.authLogin = config.authLogin;
+        // Authentication
+        // TODO Authenticate AFTER the connection is initialized
+        if (config.authToken) {
+            if (typeof config.authToken !== "string" || config.authToken.length > 250)
+                throw MalformedConfigError.Auth();
+            else this.authToken = config.authToken;
+        }
+        else if (config.authLogin) {
+            if (!config.authLogin.username || typeof config.authLogin.username !== "string" || config.authLogin.username.length > 250
+                || !config.authLogin.apiKey || typeof config.authLogin.apiKey !== "string" || config.authLogin.apiKey.length > 250)
+                throw MalformedConfigError.Auth();
+            else this.authLogin = config.authLogin;
+        }
 
+        // Debug
         if (config.debug) Logger.debug = true;
     }
 
-    public authViaToken(authToken: AuthToken): void { this.authToken = authToken; }
-    public authViaLogin(authLogin: AuthLogin): void { this.authLogin = authLogin; }
-    public getAuthLogin(): AuthLogin { return this.authLogin; }
+    public static connect(config?: APIConfig): E621 {
+        if (!this.instance) this.instance = new E621(config);
+        return this.instance;
+    }
 
     public makeRequest(endpoint: string, config?: RequestConfig): Promise<any> {
 
@@ -68,8 +91,8 @@ export default class E621 {
         }
 
         // Timeout
-        if (!config.timeout) config.timeout = this.defaultTimeout;
-        else if (config.timeout < 500) config.timeout = 500;
+        if (!config.rateLimit) config.rateLimit = this.rateLimit;
+        else if (config.rateLimit < 500) config.rateLimit = 500;
 
         // Authentication
         if (this.authLogin) {
@@ -79,18 +102,23 @@ export default class E621 {
 
         /* Compiling the data and adding it to the queue */
 
-        let url = this.domain + "/" + endpoint;
+        let url = this.domain + endpoint;
         const queryParams = APIQuery.flatten(config.query);
         if (queryParams.length > 0) url += "?" + queryParams.join("&");
 
-        return RequestQueue.add(url, requestInfo, config.timeout);
+        return RequestQueue.add(url, requestInfo, config.rateLimit);
+
     }
+
 }
 
+if (typeof process === "undefined")
+    (window as any).E621 = E621;
+
 interface APIConfig {
-    userAgent: string;
-    defaultTimeout?: number;
-    domain?: string;
+    userAgent: string,
+    rateLimit: 500 | number,
+    domain: "https://e621.net" | "https://e926.net" | string,
 
     authToken?: AuthToken;
     authLogin?: AuthLogin
@@ -108,7 +136,7 @@ interface RequestConfig {
     method?: "GET" | "POST",
     query?: APIQuery,
     body?: APIQuery,
-    timeout?: number,
+    rateLimit?: number,
 }
 
 export interface APIQuery {

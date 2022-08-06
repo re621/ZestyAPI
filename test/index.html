@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <title>Zesty API</title>
+    <script src="../dist/zestyapi.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <pre id="output"></pre>
+
+    <script>
+        const output = $("#output");
+
+        const esix = E621.connect({
+            userAgent: "zestyapi/example",
+            debug: true,
+        });
+        esix.Posts.get(12345).then((result) => {
+            output.text(JSON.stringify(result, null, 2));
+        });
+    </script>
+</body>
+
+</html>
