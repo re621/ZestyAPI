@@ -2,7 +2,7 @@
   "name": "re621.zestyapi",
   "version": "1.0.0",
   "description": "A comprehensive JS wrapper for e621.net API",
-  "main": "dist/zestyapi.js",
+  "main": "dist/ZestyAPI.js",
   "scripts": {
     "build": "webpack",
     "test": "jest"

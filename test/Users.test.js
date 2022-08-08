@@ -1,12 +1,33 @@
 const esix = require("./_tests");
 
 describe("Users", () => {
-    test("Fetch specific user (by name)", async () => {
-        const result = await esix.Users.getByUsername("bitWolfy");
-        expect(result.id).toBe(211960);
+
+    // find()
+    test("Find user (by name)", async () => {
+        const result = await esix.Users.find({ name_matches: "bitWolfy" });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBe(1);
     });
-    test("Fetch specific user (by ID)", async () => {
-        const result = await esix.Users.getByID(211960);
-        expect(result.id).toBe(211960);
+
+    // get()
+    test("Fetch user (by name)", async () => {
+        const result = await esix.Users.get("bitWolfy");
+        expect(result.status.code).toBe(200);
+        expect(result.data.id).toBe(211960);
+    });
+    test("Fetch user (by ID)", async () => {
+        const result = await esix.Users.get(211960);
+        expect(result.status.code).toBe(200);
+        expect(result.data.id).toBe(211960);
+    });
+    test("Fetch user (wrong name)", async () => {
+        const result = await esix.Users.get("a");
+        expect(result.status.code).toBe(404);
+        expect(result.data).toBe(null);
+    });
+    test("Fetch user (wrong ID)", async () => {
+        const result = await esix.Users.get(-451);
+        expect(result.status.code).toBe(404);
+        expect(result.data).toBe(null);
     });
 });

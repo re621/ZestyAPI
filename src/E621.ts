@@ -1,8 +1,10 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
-import PostEndpoint from "./endpoints/Post";
-import UserEndpoint from "./endpoints/User";
+import PostEndpoint from "./endpoints/Posts";
+import { TagsEndpoint } from "./endpoints/Tags";
+import UserEndpoint from "./endpoints/Users";
+import { UtilityEndpoint } from "./endpoints/Utility";
 import { MalformedConfigError } from "./error/InitializationError";
 
 export default class E621 {
@@ -19,6 +21,9 @@ export default class E621 {
     // Endpoint declarations
     public Posts = new PostEndpoint(this);
     public Users = new UserEndpoint(this);
+    public Tags = new TagsEndpoint(this);
+
+    public Utility = new UtilityEndpoint(this)
 
     private constructor(config: APIConfig) {
         // User Agent
@@ -133,7 +138,7 @@ interface AuthLogin {
 }
 
 interface RequestConfig {
-    method?: "GET" | "POST",
+    method?: "GET" | "POST" | "HEAD" | "PATCH",
     query?: APIQuery,
     body?: APIQuery,
     rateLimit?: number,

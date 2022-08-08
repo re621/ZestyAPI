@@ -1,7 +1,7 @@
-const E621 = require("../dist/zestyapi");
+const E621 = require("../dist/ZestyAPI");
 
 const esix = E621.connect({
-    userAgent: "zestyapi/example",
+    userAgent: "ZestyAPI/Example",
     debug: false,
 });
 

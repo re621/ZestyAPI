@@ -18,7 +18,7 @@ module.exports = {
         extensions: [".ts", ".js"]
     },
     output: {
-        filename: "zestyapi.js",
+        filename: "ZestyAPI.js",
         path: path.resolve(__dirname, "dist"),
         globalObject: "this",
         library: {
