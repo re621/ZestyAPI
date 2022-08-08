@@ -5,6 +5,9 @@ import { APIUser } from "../responses/APIUser";
 
 export default class UserEndpoint extends Endpoint {
 
+    public UserLevel = UserLevel;
+    public SearchOrder = UserSearchOrder;
+
     constructor(api: E621) {
         super(api);
     }
