@@ -1,6 +1,5 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
-const production = process.env.NODE_ENV === 'production' || false;
 
 module.exports = {
     entry: "./src/E621.ts",
@@ -28,7 +27,7 @@ module.exports = {
         },
     },
     optimization: {
-        minimize: production,
+        minimize: true,
         minimizer: [
             (compiler) => {
                 new TerserPlugin({
