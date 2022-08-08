@@ -1,6 +1,6 @@
 {
   "name": "re621.zestyapi",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A comprehensive JS wrapper for e621.net API",
   "main": "dist/ZestyAPI.js",
   "scripts": {
