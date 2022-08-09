@@ -2,6 +2,7 @@ import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
 import { Validation } from "./components/Validation";
+import { CommentsEndpoint } from "./endpoints/Comments";
 import { PostEventsEndpoint } from "./endpoints/PostEvents";
 import PostEndpoint from "./endpoints/Posts";
 import { TagAliasesEndpoint, TagImplicationsEndpoint } from "./endpoints/TagAliases";
@@ -23,14 +24,14 @@ export default class E621 {
     private authLogin: AuthLogin;
 
     // Endpoint declarations
+    public Comments = new CommentsEndpoint(this);
     public Posts = new PostEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
-    public Users = new UserEndpoint(this);
-    public UserFeedbacks = new UserFeedbacksEndpoint(this);
     public Tags = new TagsEndpoint(this);
     public TagAliases = new TagAliasesEndpoint(this);
     public TagImplications = new TagImplicationsEndpoint(this);
-
+    public Users = new UserEndpoint(this);
+    public UserFeedbacks = new UserFeedbacksEndpoint(this);
     public Utility = new UtilityEndpoint(this)
 
     private constructor(config: APIConfig) {
