@@ -1,23 +1,23 @@
 const esix = require("./_tests");
 
 describe("Tags", () => {
-    // Functionality
-    test("Fetch specific tag", async () => {
-        const result = await esix.Tags.get("mammal");
-        expect(result.data.name).toBe("mammal");
-    });
-    test("Fetch specific tag, the other way", async () => {
-        const result = await esix.Tags.find("mammal");
-        expect(result.data.length).toBe(1);
-    });
+    // find()
     test("Fetch multiple tags", async () => {
-        const result = await esix.Tags.find(["mammal", "solo"]);
+        const result = await esix.Tags.find({ name: ["mammal", "solo"] });
+        expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(2);
+        expect(result.data[0].name).toBe("mammal");
     });
 
-    // Bad input
-    test("Undefined input", async () => {
+    // get()
+    test("Fetch specific tag", async () => {
+        const result = await esix.Tags.get("mammal");
+        expect(result.status.code).toBe(200);
+        expect(result.data.name).toBe("mammal");
+    });
+    test("Fetch undefined tag", async () => {
         const result = await esix.Tags.get(undefined);
-        expect(result).toBe(null);
+        expect(result.status.code).toBe(491);
+        expect(result.data).toBe(null);
     });
 });
