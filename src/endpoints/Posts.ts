@@ -114,14 +114,14 @@ export default class PostsEndpoint extends Endpoint {
     }
 
     protected validateQueryParams(params: PostQueryParams = {}): PostQueryParams {
-        const result = super.validateSearchParams(params) as PostQueryParams;
+        const result = super.validateQueryParams(params) as PostQueryParams;
 
         if (!params.tags) result.tags = [];
         else if (typeof params.tags !== "object") result.tags = (params.tags + "").trim().split(" ").filter(n => n);
         else if (Array.isArray(params.tags)) result.tags = params.tags;
         else throw MalformedRequestError.Params();
 
-        if (params.tags.length > 40) throw MalformedRequestError.TooMany("tags");
+        if (result.tags.length > 40) throw MalformedRequestError.TooMany("tags");
 
         return result as PostQueryParams;
     }
