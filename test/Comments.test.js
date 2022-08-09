@@ -21,7 +21,7 @@ describe("Comments", () => {
     test("Fetch comments (by tag match)", async () => {
         const result = await esix.Comments.find({ post_tags_match: "mammal" });
         expect(result.status.code).toBe(200);
-        expect(result.data.length).toBe(75);
+        expect(result.data.length).toBeGreaterThan(1);
     });
     test("Fetch comments (hidden)", async () => {
         const result = await esix.Comments.find({ is_hidden: true });
