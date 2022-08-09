@@ -1,6 +1,6 @@
-import Endpoint, { SearchParams } from "../components/Endpoint";
+import Endpoint, { QueryParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import Util from "../components/Util";
+import { PrimitiveMap } from "../components/Util";
 import { MalformedRequestError } from "../error/RequestError";
 import { APIPost } from "../responses/APIPost";
 
@@ -9,30 +9,17 @@ export default class PostEndpoint extends Endpoint {
     /**
      * Search for posts with specified tags.  
      * Note that the hard limit for this request is 40 tags.  
-     * If the page limit and post number need to be specified, use the other overload.
-     * @param {string | string[]} tags List of tags to search for
-     * @returns {FormattedResponse<APIPost[]>} Post data
-     */
-    public async find(tags?: string | string[]): Promise<FormattedResponse<APIPost[]>>
-    /**
-     * Search for posts with specified tags.  
-     * Note that the hard limit for this request is 40 tags.  
      * Page number and post limit can be specified as parameters.
      * @param {PostSearchParams} params Search parameters
      * @returns {FormattedResponse<APIPost[]>} Post data
      */
-    public async find(params: PostSearchParams): Promise<FormattedResponse<APIPost[]>>
-    public async find(params: string | string[] | PostSearchParams): Promise<FormattedResponse<APIPost[]>> {
-        if (typeof params == "undefined") return this.find({});
-        else if (typeof params == "string") return this.find({ tags: params.trim().split(" ").filter(n => n) });
-        else if (Array.isArray(params)) return this.find({ tags: params });
+    public async find(query: PostQueryParams): Promise<FormattedResponse<APIPost[]>> {
 
-        let query: PostSearchParams;
-        try { query = this.validateFindParams(params); }
+        let lookup: PrimitiveMap;
+        try { lookup = this.validateParams({}, query); }
         catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
 
-        if (query.tags) query.tags = Util.encodeArray(query.tags);
-        return this.api.makeRequest("posts.json", { query: Endpoint.flattenSearchParams(query, "+") })
+        return this.api.makeRequest("posts.json", { query: Endpoint.flattenParams(lookup, "+") })
             .then(
                 (response: QueueResponse) => {
                     if (!response.data.posts || response.data.posts.length == 0) {
@@ -82,7 +69,7 @@ export default class PostEndpoint extends Endpoint {
     public async getMany(ids: number[]): Promise<FormattedResponse<APIPost[]>> {
         if (!Array.isArray(ids))
             return Endpoint.makeMalformedRequestResponse();
-        return this.find("id:" + ids.join(","));
+        return this.find({ tags: "id:" + ids.join(",") });
     }
 
     /**
@@ -109,60 +96,37 @@ export default class PostEndpoint extends Endpoint {
     /**
      * Search for posts with specified tags.  
      * Note that the hard limit for this request is 39 tags.  
-     * If the page limit and post number need to be specified, use the other overload.
-     * @param {string | string[]} tags List of tags to search for
-     * @returns {FormattedResponse<APIPost[]>} Post data
-     */
-    public async randomMany(tags?: string | string[]): Promise<FormattedResponse<APIPost[]>>
-    /**
-     * Search for posts with specified tags.  
-     * Note that the hard limit for this request is 39 tags.  
      * Page number and post limit can be specified as parameters.
-     * @param {PostSearchParams} params Search parameters
+     * @param {PostQueryParams} query Search parameters
+     * @param {string} seed Random seed. Optional.
      * @returns {FormattedResponse<APIPost[]>} Post data
      */
-    public async randomMany(params: PostSearchParams): Promise<FormattedResponse<APIPost[]>>
-    public async randomMany(params: string | string[] | PostSearchParams): Promise<FormattedResponse<APIPost[]>> {
-        if (typeof params == "undefined") return this.find({});
-        else if (typeof params == "string") return this.find({ tags: params.trim().split(" ").filter(n => n) });
-        else if (Array.isArray(params)) return this.find({ tags: params });
+    public async randomMany(query: PostQueryParams = {}, seed?: string): Promise<FormattedResponse<APIPost[]>> {
 
-        let query: PostSearchParams;
-        try { query = this.validateFindParams(params); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        if (query.tags) {
+            if (!Array.isArray(query.tags)) query.tags = query.tags.trim().split(" ").filter(n => n);
+        } else query.tags = [];
 
-        if (!query.tags) query.tags = [];
         query.tags.push("order:random");
-        query.tags = Util.encodeArray(query.tags);
+        if (seed) query.tags.push("randseed:" + seed);
 
-        return this.api.makeRequest("posts.json", { query: Endpoint.flattenSearchParams(query, "+") })
-            .then(
-                (response: QueueResponse) => {
-                    if (!response.data.posts || response.data.posts.length == 0) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    } else response.data = response.data.posts;
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => {
-                    return Endpoint.formatAPIResponse(error.status, []);
-                }
-            );
+        return this.find(query);
     }
 
-    protected validateFindParams(params: PostSearchParams = {}): PostSearchParams {
-        const result = super.validateFindParams(params) as PostSearchParams;
+    protected validateQueryParams(params: PostQueryParams = {}): PostQueryParams {
+        const result = super.validateSearchParams(params) as PostQueryParams;
 
         if (!params.tags) result.tags = [];
-        else if (typeof params.tags !== "object") result.tags = [params.tags + ""];
+        else if (typeof params.tags !== "object") result.tags = (params.tags + "").trim().split(" ").filter(n => n);
         else if (Array.isArray(params.tags)) result.tags = params.tags;
         else throw MalformedRequestError.Params();
 
-        return result as PostSearchParams;
+        if (params.tags.length > 40) throw MalformedRequestError.TooMany("tags");
+
+        return result as PostQueryParams;
     }
 }
 
-interface PostSearchParams extends SearchParams {
-    tags?: string[]
+interface PostQueryParams extends QueryParams {
+    tags?: string | string[]
 }

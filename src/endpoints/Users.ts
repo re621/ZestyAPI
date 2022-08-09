@@ -1,5 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { PrimitiveMap } from "../components/Util";
 import { Validation } from "../components/Validation";
 import E621 from "../E621";
 import { APIUser, APIUserLevel } from "../responses/APIUser";
@@ -18,13 +19,14 @@ export default class UserEndpoint extends Endpoint {
      * @param {UserSearchParams} params Search parameters
      * @returns {FormattedResponse<APIUser[]>} User data
      */
-    public async find(params: UserSearchParams): Promise<FormattedResponse<APIUser[]>> {
+    public async find(search: UserSearchParams = {}): Promise<FormattedResponse<APIUser[]>> {
 
-        let query: UserSearchParams;
-        try { query = this.validateFindParams(params); }
+        const query = this.splitQueryParams(search);
+        let lookup: PrimitiveMap;
+        try { lookup = this.validateParams(search, query); }
         catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
 
-        return this.api.makeRequest("users.json", { query: Endpoint.flattenSearchParams({ search: query }, "+") })
+        return this.api.makeRequest("users.json", { query: Endpoint.flattenParams(lookup) })
             .then(
                 (response: QueueResponse) => {
                     if (!response.data || response.data.length == 0) {
@@ -69,8 +71,8 @@ export default class UserEndpoint extends Endpoint {
         });
     }
 
-    protected validateFindParams(params: UserSearchParams = {}): UserSearchParams {
-        const result = super.validateFindParams(params) as UserSearchParams;
+    protected validateSearchParams(params: UserSearchParams = {}): UserSearchParams {
+        const result = super.validateSearchParams(params) as UserSearchParams;
 
         if (params.name_matches && !Validation.isObject(params.name_matches))
             result.name_matches = params.name_matches + "";

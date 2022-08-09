@@ -1,5 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { PrimitiveMap } from "../components/Util";
 import { Validation } from "../components/Validation";
 import { APITag, APITagCategory } from "../responses/APITag";
 
@@ -12,13 +13,14 @@ export class TagsEndpoint extends Endpoint {
      * @param {TagSearchParams} params Search parameters
      * @returns {FormattedResponse<APITag[]>} Tag data
      */
-    public find(params: TagSearchParams): Promise<FormattedResponse<APITag[]>> {
+    public find(search: TagSearchParams = {}): Promise<FormattedResponse<APITag[]>> {
 
-        let query: TagSearchParams;
-        try { query = this.validateFindParams(params); }
+        const query = this.splitQueryParams(search);
+        let lookup: PrimitiveMap;
+        try { lookup = this.validateParams(search, query); }
         catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
 
-        return this.api.makeRequest("tags.json", { query: Endpoint.flattenSearchParams({ search: query }) })
+        return this.api.makeRequest("tags.json", { query: Endpoint.flattenParams(lookup) })
             .then(
                 (response: QueueResponse) => {
                     if (response.data.tags) {
@@ -60,8 +62,8 @@ export class TagsEndpoint extends Endpoint {
             );
     }
 
-    protected validateFindParams(params: TagSearchParams = {}): TagSearchParams {
-        const result = super.validateFindParams(params) as TagSearchParams;
+    protected validateSearchParams(params: TagSearchParams = {}): TagSearchParams {
+        const result = super.validateSearchParams(params) as TagSearchParams;
 
         if (params.name && (Array.isArray(params.name) || Validation.isString(params.name))) result.name = params.name;
         if (params.category && Validation.isInteger(params.category)) result.category = params.category;

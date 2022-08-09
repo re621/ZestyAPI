@@ -8,12 +8,12 @@ describe("Posts", () => {
         expect(result.data.length).toBe(75);
     });
     test("Fetch many posts (tags, method A)", async () => {
-        const result = await esix.Posts.find("horse solo");
+        const result = await esix.Posts.find({ tags: "horse solo" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
     });
     test("Fetch many posts (tags, method B)", async () => {
-        const result = await esix.Posts.find(["horse", "solo"]);
+        const result = await esix.Posts.find({ tags: ["horse", "solo"] });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
     });
@@ -38,12 +38,12 @@ describe("Posts", () => {
         expect(result.data.length).toBe(10);
     });
     test("Fetch many posts (no results)", async () => {
-        const result = await esix.Posts.find("abcdefg");
+        const result = await esix.Posts.find({ tags: "abcdefg" });
         expect(result.status.code).toBe(404);
         expect(result.data.length).toBe(0);
     });
     test("Fetch many posts (encoding test)", async () => {
-        const result = await esix.Posts.find("love_death_+_robots");
+        const result = await esix.Posts.find({ tags: "love_death_+_robots" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
     });

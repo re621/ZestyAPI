@@ -1,5 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { PrimitiveMap } from "../components/Util";
 import { Validation } from "../components/Validation";
 import { APIPostEventAction } from "../responses/APIPostEvent";
 
@@ -7,12 +8,14 @@ export class PostEventsEndpoint extends Endpoint {
 
     public PostEventAction = APIPostEventAction;
 
-    public async find(params: PostEventSearchParams): Promise<FormattedResponse<any>> {
-        let query: PostEventSearchParams;
-        try { query = this.validateFindParams(params); }
+    public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<any>> {
+
+        const query = this.splitQueryParams(search);
+        let lookup: PrimitiveMap;
+        try { lookup = this.validateParams(search, query); }
         catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
 
-        return this.api.makeRequest("post_events.json", { query: Endpoint.flattenSearchParams({ search: query }) })
+        return this.api.makeRequest("post_events.json", { query: Endpoint.flattenParams(lookup) })
             .then(
                 (response: QueueResponse) => {
                     if (!response.data.post_events || response.data.post_events.length == 0) {
@@ -28,8 +31,8 @@ export class PostEventsEndpoint extends Endpoint {
             );
     }
 
-    protected validateFindParams(params: PostEventSearchParams = {}): PostEventSearchParams {
-        const results = super.validateFindParams(params) as PostEventSearchParams;
+    protected validateSearchParams(params: PostEventSearchParams = {}): PostEventSearchParams {
+        const results = super.validateSearchParams(params) as PostEventSearchParams;
 
         if (params.id && (Array.isArray(params.id) || Validation.isInteger(params.id))) results.id = params.id;
         if (params.post_id && Validation.isInteger(params.post_id)) results.post_id = params.post_id;

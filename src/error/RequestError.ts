@@ -14,4 +14,8 @@ export class MalformedRequestError extends RequestError {
     public static Params(): MalformedRequestError {
         return new MalformedRequestError("Request parameters are malformed or missing");
     }
+
+    public static TooMany(param: string): MalformedRequestError {
+        return new MalformedRequestError("Parameter exceeds search limit: " + param)
+    }
 }

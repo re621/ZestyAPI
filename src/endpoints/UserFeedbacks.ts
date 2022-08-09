@@ -1,5 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { PrimitiveMap } from "../components/Util";
 import { Validation } from "../components/Validation";
 import { APIFeedback, APIFeedbackCategory } from "../responses/APIFeedback";
 
@@ -7,17 +8,17 @@ export class UserFeedbacksEndpoint extends Endpoint {
 
     public FeedbackCategory = APIFeedbackCategory;
 
-    public find(params: UserFeedbacksSearchParams): Promise<FormattedResponse<APIFeedback[]>> {
+    public find(search: UserFeedbacksSearchParams = {}): Promise<FormattedResponse<APIFeedback[]>> {
 
-        let query: UserFeedbacksSearchParams;
-        try { query = this.validateFindParams(params); }
+        const query = this.splitQueryParams(search);
+        let lookup: PrimitiveMap;
+        try { lookup = this.validateParams(search, query); }
         catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
 
-        return this.api.makeRequest("user_feedbacks.json", { query: Endpoint.flattenSearchParams({ search: query }) })
+        return this.api.makeRequest("user_feedbacks.json", { query: Endpoint.flattenParams(lookup) })
             .then(
                 (response: QueueResponse) => {
                     if (response.data.user_feedbacks) {
-                        console.log(response);
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
@@ -28,8 +29,8 @@ export class UserFeedbacksEndpoint extends Endpoint {
             );
     }
 
-    protected validateFindParams(params: UserFeedbacksSearchParams = {}): UserFeedbacksSearchParams {
-        const result = super.validateFindParams(params) as UserFeedbacksSearchParams;
+    protected validateSearchParams(params: UserFeedbacksSearchParams = {}): UserFeedbacksSearchParams {
+        const result = super.validateSearchParams(params) as UserFeedbacksSearchParams;
 
         if (params.id && (Array.isArray(params.id) || Validation.isInteger(params.id))) result.id = params.id;
         if (params.user_name && Validation.isString(params.user_name)) result.user_name = params.user_name;

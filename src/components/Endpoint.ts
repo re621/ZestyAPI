@@ -12,13 +12,50 @@ export default class Endpoint {
     }
 
     /**
+     * Parses the SearchParams and finds values that
+     * need to be split off into QueryParams.
+     * @param {SearchParams} search Search params
+     * @returns {QueryParams} Query params
+     */
+    protected splitQueryParams(search: SearchParams = {}): QueryParams {
+        const result: QueryParams = {};
+        if (search.limit) result.limit = search.limit;
+        if (search.page) result.page = search.page;
+        return result;
+    }
+
+    /**
+     * Validates both sets of parameters and returns a prepared
+     * map that can be plugged into `flattenParams()`.
+     * @param {SearchParams} search Search parameters
+     * @param {QueryParams} query Query parameters
+     * @returns Validated results
+     * @throws {MalformedRequestError} If the errors in the parameters are irreconcilable
+     */
+    protected validateParams(search: SearchParams = {}, query: QueryParams = {}): PrimitiveMap {
+        search = this.validateSearchParams(search);
+        query = this.validateQueryParams(query);
+        let result = Object.keys(query).length ? query : {};
+        if (Object.keys(search).length) result["search"] = search;
+        return result;
+    }
+
+    /**
      * Validates the search parameters for the `find()` methods.  
-     * By default, only checks the limit and page number variables.
+     * Does nothing by default. Extend this method to add validation.
      * @param {SearchParams} params Search parameters
-     * @param {any} extra Extra data to be passed to the validator
      * @returns {SearchParams} Validated parameters
      */
-    protected validateFindParams(params: SearchParams, ...extra: any): SearchParams {
+    protected validateSearchParams(params: SearchParams = {}): SearchParams {
+        return params;
+    }
+
+    /**
+     * Validates the query parameters for the `find()` methods.
+     * @param {QueryParams} params Query parameters
+     * @returns {QueryParams} Validated parameters
+     */
+    protected validateQueryParams(params: QueryParams = {}): QueryParams {
         const results: SearchParams = {};
         if (!params) return results;
 
@@ -58,11 +95,12 @@ export default class Endpoint {
 
     /**
      * Converts a value in a SearchParams format to an object with string values
-     * @param {SearchParams} params Original object
+     * @param {PrimitiveMap} params Original object
      * @param {string} separator Array join separator
+     * @param {StringMap} keyReplacement Substitutions for key names
      * @returns Flattened object
      */
-    protected static flattenSearchParams(params: PrimitiveMap, separator: string = ",", keyReplacement?: StringMap): StringMap {
+    protected static flattenParams(params: PrimitiveMap, separator: string = ",", keyReplacement?: StringMap): StringMap {
         let result: StringMap = {};
 
         for (const [key, value] of Object.entries(params)) {
@@ -86,12 +124,14 @@ export default class Endpoint {
             // Array
             if (Array.isArray(value)) {
                 if (value.length == 0) return;
+                value = Util.encodeArray(value);
                 obj[formatKey(key, keyStack)] = value.join(separator);
                 return obj;
             }
 
             // Primitive type
             if (typeof value !== "object") {
+                value = Util.encode(value);
                 obj[formatKey(key, keyStack)] = value + "";
                 return obj;
             }
@@ -135,9 +175,15 @@ export default class Endpoint {
 
 /**
  * Search parameters for the `find()` methods.  
- * Only include result limit and page number by default.
+ * Empty by default. Extend this interface to add more.
  */
-export interface SearchParams extends PrimitiveMap {
+export interface SearchParams extends PrimitiveMap, QueryParams { }
+
+/**
+ * Query parameters for the `find()` methods.  
+ * Include the result limit and page number common for all endpoints
+ */
+export interface QueryParams extends PrimitiveMap {
     /**
      * Number of posts on the page.  
      * Number between 1 and 320, defaults to 75
