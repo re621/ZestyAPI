@@ -14,7 +14,7 @@ export default class TagImplicationsEndpoint extends TagRelationshipsEndpoint {
 
     public ImplicationStatus = APITagAliasStatus;
 
-    public find(params: TagRelationshipSearchParams): Promise<FormattedResponse<APITagAlias[]>> {
+    public find(params: TagRelationshipSearchParams = {}): Promise<FormattedResponse<APITagAlias[]>> {
         return super.commonFind("tag_implications", params);
     }
 

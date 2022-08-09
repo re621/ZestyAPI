@@ -23,7 +23,7 @@ export default class PostsEndpoint extends Endpoint {
      * @param {PostSearchParams} params Search parameters
      * @returns {FormattedResponse<APIPost[]>} Post data
      */
-    public async find(query: PostQueryParams): Promise<FormattedResponse<APIPost[]>> {
+    public async find(query: PostQueryParams = {}): Promise<FormattedResponse<APIPost[]>> {
 
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams({}, query); }

@@ -13,7 +13,7 @@ export default class BlipsEndpoint extends Endpoint {
 
     */
 
-    public async find(search: BlipSearchParams): Promise<FormattedResponse<APIBlip[]>> {
+    public async find(search: BlipSearchParams = {}): Promise<FormattedResponse<APIBlip[]>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
