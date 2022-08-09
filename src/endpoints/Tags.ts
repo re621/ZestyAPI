@@ -24,8 +24,6 @@ export class TagsEndpoint extends Endpoint {
             .then(
                 (response: QueueResponse) => {
                     if (response.data.tags) {
-                        // Yes, this is the inverse of what happens on other endpoints.
-                        // The `tags` wrapper only appears if there are no results
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
