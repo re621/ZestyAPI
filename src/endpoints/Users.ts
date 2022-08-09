@@ -55,23 +55,18 @@ export default class UserEndpoint extends Endpoint {
         );
     }
 
-    public isAuthenticated(): Promise<boolean> {
-        const auth = {
-            username: "username",
-        }
-        /*
-        TODO Fix this
+    /**
+     * Checks if the saved login credentials are correct or not.
+     * Does not work with the AuthToken, since there is no username provided.
+     * @returns {boolean} `true` if the user is logged in, `false` otherwise.
+     */
+    public async isAuthenticated(): Promise<boolean> {
         const auth = this.api.getAuthLogin();
-        if (!auth || !auth.apiKey || !auth.username) return Promise.resolve(false);
-        */
+        if (!auth) return Promise.resolve(false);
 
-        return this.api.makeRequest(`users/${auth.username}.json`).then(
-            (data) => {
-                if (!data.name || data.success == false) return false;
-                return typeof data.email !== "undefined";
-            },
-            (error) => { return false; }
-        );
+        return this.get(auth.username).then((response) => {
+            return response.status.code == 200;
+        });
     }
 
     protected validateFindParams(params: UserSearchParams = {}): UserSearchParams {

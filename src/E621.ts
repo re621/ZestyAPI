@@ -1,6 +1,7 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
+import { Validation } from "./components/Validation";
 import { PostEventsEndpoint } from "./endpoints/PostEvents";
 import PostEndpoint from "./endpoints/Posts";
 import { TagsEndpoint } from "./endpoints/Tags";
@@ -46,28 +47,52 @@ export default class E621 {
         catch { throw MalformedConfigError.Domain(); }
 
         // Authentication
-        // TODO Authenticate AFTER the connection is initialized
-        if (config.authToken) {
-            if (typeof config.authToken !== "string" || config.authToken.length > 250)
-                throw MalformedConfigError.Auth();
-            else this.authToken = config.authToken;
-        }
-        else if (config.authLogin) {
-            if (!config.authLogin.username || typeof config.authLogin.username !== "string" || config.authLogin.username.length > 250
-                || !config.authLogin.apiKey || typeof config.authLogin.apiKey !== "string" || config.authLogin.apiKey.length > 250)
-                throw MalformedConfigError.Auth();
-            else this.authLogin = config.authLogin;
-        }
+        if (config.authToken) this.login(config.authToken);
+        else if (config.authLogin) this.login(config.authLogin);
 
         // Debug
         if (config.debug) Logger.debug = true;
     }
 
+    /**
+     * Get an instance of a E621 object, with access to various endpoints
+     * @param {APIConfig} config Configuration object. Not necessary if `connect()` was called before.
+     * @returns {E621} E621 object
+     */
     public static connect(config?: APIConfig): E621 {
         if (!this.instance) this.instance = new E621(config);
         return this.instance;
     }
 
+    public login(auth: AuthToken | AuthLogin): void {
+        this.logout();
+        if (typeof auth == "string") {
+            if (!Validation.isString(auth) || auth.length > 250)
+                throw MalformedConfigError.Auth();
+            else this.authToken = auth;
+        } else {
+            if (!auth.username || !Validation.isString(auth.username) || auth.username.length > 250
+                || !auth.apiKey || !Validation.isString(auth.apiKey) || auth.apiKey.length > 250)
+                throw MalformedConfigError.Auth();
+            else this.authLogin = auth;
+        }
+    }
+
+    public logout(): void {
+        this.authToken = undefined;
+        this.authLogin = undefined;
+    }
+
+    public getAuthToken(): AuthToken { return this.authToken; }
+    public getAuthLogin(): AuthLogin { return this.authLogin; }
+
+    /**
+     * Method used to make requests to E621's API.  
+     * It is strongly recommended not to use it directly, and to instead rely on endpoint methods.
+     * @param {string} endpoint Endpoint address
+     * @param {RequestConfig} config Request parameters
+     * @returns {Promise<any>} Promise that is fulfilled when the request receives a response
+     */
     public makeRequest(endpoint: string, config?: RequestConfig): Promise<any> {
 
         const requestInfo = {};

@@ -1,4 +1,7 @@
 const esix = require("./_tests");
+require('dotenv').config()
+
+const testIf = (condition, ...args) => condition ? test(...args) : test.skip(...args);
 
 describe("Users", () => {
 
@@ -44,5 +47,19 @@ describe("Users", () => {
         const result = await esix.Users.get(-451);
         expect(result.status.code).toBe(404);
         expect(result.data).toBe(null);
+    });
+
+    // auth
+    testIf((process.env.ESIX_USER && process.env.ESIX_KEY), "Authentication (success)", async () => {
+        esix.login({ username: process.env.ESIX_USER, apiKey: process.env.ESIX_KEY });
+        const result = await esix.Users.isAuthenticated();
+        esix.logout();
+        expect(result).toBe(true);
+    });
+    test("Authentication (failure)", async () => {
+        esix.login({ username: "bitWolfy", apiKey: "qwerty123456" });
+        const result = await esix.Users.isAuthenticated();
+        esix.logout();
+        expect(result).toBe(false);
     });
 });
