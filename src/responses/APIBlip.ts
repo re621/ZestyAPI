@@ -1,6 +1,6 @@
-import APIResponse from "./APIResponse";
+import APIResponse, { APIWarnedMessage } from "./APIResponse";
 
-export interface APIBlip extends APIResponse {
+export interface APIBlip extends APIResponse, APIWarnedMessage {
     id: number;
     creator_id: number;
     body: string;

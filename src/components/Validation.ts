@@ -42,7 +42,7 @@ export default class Validation {
      * @param {boolean} array If set to `true`, arrays will not be considered objects
      * @returns `true` if the value is an object, `false` otherwise
      */
-    public static isObject(value: any, array = false): boolean {
+    public static isObject(value: any, array: boolean = false): boolean {
         if (array && this.isArray(value)) return true;
         return typeof value == "object";
     }
@@ -54,6 +54,15 @@ export default class Validation {
      */
     public static isArray(value: any): boolean {
         return Array.isArray(value);
+    }
+
+    /**
+     * Checks if the provided value is null
+     * @param {any} value Value being evaluated
+     * @returns `true` if the value is null, `false` otherwise
+     */
+    public static isNull(value: any): boolean {
+        return value === null;
     }
 
 }

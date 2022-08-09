@@ -18,10 +18,15 @@ export default class BlipsEndpoint extends Endpoint<APIBlip> {
     protected validateSearchParams(params: BlipSearchParams = {}): BlipSearchParams {
         const results = super.validateSearchParams(params) as BlipSearchParams;
 
+        // Native
         if (params.creator_name && Validation.isString(params.creator_name)) results.creator_name = params.creator_name;
         if (params.body_matches && Validation.isString(params.body_matches)) results.body_matches = params.body_matches;
         if (params.response_to && Validation.isInteger(params.response_to)) results.response_to = params.response_to;
         if (params.order && Validation.isString(params.order)) results.order = params.order;
+
+        // Derived
+        if (params.id && Validation.isInteger(params.id)) results.id = params.id;
+        if (params.creator_id && Validation.isInteger(params.creator_id)) results.creator_id = params.creator_id;
 
         return results;
     }
@@ -29,10 +34,15 @@ export default class BlipsEndpoint extends Endpoint<APIBlip> {
 }
 
 interface BlipSearchParams extends SearchParams {
+    // Native
     creator_name?: string,
     body_matches?: string,
-    response_to?: number,
+    response_to?: number | null,
     order?: BlipSearchOrder,
+
+    // Derived
+    id?: number,
+    creator_id?: number,
 }
 
 enum BlipSearchOrder {
