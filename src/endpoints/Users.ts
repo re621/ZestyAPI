@@ -1,11 +1,12 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { Validation } from "../components/Validation";
 import E621 from "../E621";
-import { APIUser } from "../responses/APIUser";
+import { APIUser, APIUserLevel } from "../responses/APIUser";
 
 export default class UserEndpoint extends Endpoint {
 
-    public UserLevel = UserLevel;
+    public UserLevel = APIUserLevel;
     public SearchOrder = UserSearchOrder;
 
     constructor(api: E621) {
@@ -73,24 +74,24 @@ export default class UserEndpoint extends Endpoint {
         );
     }
 
-    protected validateFindParams(params: UserSearchParams): UserSearchParams {
+    protected validateFindParams(params: UserSearchParams = {}): UserSearchParams {
         const result = super.validateFindParams(params) as UserSearchParams;
 
-        if (params.name_matches && typeof params.name_matches !== "object")
+        if (params.name_matches && !Validation.isObject(params.name_matches))
             result.name_matches = params.name_matches + "";
-        if (params.email_matches && typeof params.email_matches !== "object")
+        if (params.email_matches && !Validation.isObject(params.email_matches))
             result.email_matches = params.email_matches + "";
-        if (typeof params.level == "number")
+        if (Array.isArray(params.level) || Validation.isInteger(params.level))
             result.level = params.level;
-        if (typeof params.min_level == "number")
+        if (Validation.isInteger(params.min_level))
             result.min_level = params.min_level;
-        if (typeof params.max_level == "number")
+        if (Validation.isInteger(params.max_level))
             result.max_level = params.max_level;
-        if (typeof params.can_upload_free == "boolean")
+        if (Validation.isBoolean(result.can_upload_free))
             result.can_upload_free = params.can_upload_free;
-        if (typeof params.can_approve_posts == "boolean")
+        if (Validation.isBoolean(params.can_approve_posts))
             result.can_approve_posts = params.can_approve_posts;
-        if (params.order && typeof params.order == "string")
+        if (params.order && Validation.isString(params.order))
             result.order = params.order;
 
         return result;
@@ -101,24 +102,12 @@ export default class UserEndpoint extends Endpoint {
 interface UserSearchParams extends SearchParams {
     name_matches?: string;
     email_matches?: string;
-    level?: UserLevel;
-    min_level?: UserLevel;
-    max_level?: UserLevel;
-    can_upload_free?: boolean; // TODO Make this YesNo
+    level?: APIUserLevel | APIUserLevel[];
+    min_level?: APIUserLevel;
+    max_level?: APIUserLevel;
+    can_upload_free?: boolean;
     can_approve_posts?: boolean;
     order?: UserSearchOrder;
-}
-
-export enum UserLevel {
-    Anonymous = 0,
-    Blocked = 10,
-    Member = 20,
-    Privileged = 30,
-    Contributor = 33,
-    FormerStaff = 34,
-    Janitor = 35,
-    Moderator = 40,
-    Admin = 50,
 }
 
 export enum UserSearchOrder {

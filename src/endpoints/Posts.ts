@@ -151,7 +151,7 @@ export default class PostEndpoint extends Endpoint {
             );
     }
 
-    protected validateFindParams(params: PostSearchParams): PostSearchParams {
+    protected validateFindParams(params: PostSearchParams = {}): PostSearchParams {
         const result = super.validateFindParams(params) as PostSearchParams;
 
         if (!params.tags) result.tags = [];

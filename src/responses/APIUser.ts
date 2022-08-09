@@ -4,7 +4,7 @@ export interface APIUser extends APIResponse {
     id: number;
     created_at: string;
     name: string;
-    level: number;
+    level: APIUserLevel;
     base_upload_limit: number;
     post_upload_count: number;
     post_update_count: number;
@@ -70,4 +70,16 @@ export interface APICurrentUser extends APIUser {
     statement_timeout: number;
     favorite_limit: number;
     tag_query_limit: number;
+}
+
+export enum APIUserLevel {
+    Anonymous = 0,
+    Blocked = 10,
+    Member = 20,
+    Privileged = 30,
+    Contributor = 33,
+    FormerStaff = 34,
+    Janitor = 35,
+    Moderator = 40,
+    Admin = 50,
 }

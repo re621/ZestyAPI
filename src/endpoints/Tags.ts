@@ -1,37 +1,49 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import Util from "../components/Util";
-import { MalformedRequestError } from "../error/RequestError";
-import { APITag } from "../responses/APITag";
+import { Validation } from "../components/Validation";
+import { APITag, APITagCategory } from "../responses/APITag";
 
 export class TagsEndpoint extends Endpoint {
 
-    public find(tags: string | string[]): Promise<FormattedResponse<APITag>> { // TODO Proper response
-        if (typeof tags == "string")
-            tags = tags.trim().split(" ").filter(n => n);
-        else if (tags == null || typeof tags == "undefined") return Endpoint.makeMalformedRequestResponse(true);
-        else if (typeof tags !== "object") tags = [tags + ""];
-        else if (!Array.isArray(tags)) return Endpoint.makeMalformedRequestResponse(true); // TODO Standardize error output
+    public Category = APITagCategory;
 
-        // Handle the fucked-up way the site returns 0 results
-        return this.api.makeRequest("tags.json", { query: { "search[name]": Util.encodeArray(tags).join(",") } })
+    /**
+     * Fetches tag data based on provided parameters
+     * @param {TagSearchParams} params Search parameters
+     * @returns {FormattedResponse<APITag[]>} Tag data
+     */
+    public find(params: TagSearchParams): Promise<FormattedResponse<APITag[]>> {
+
+        let query: TagSearchParams;
+        try { query = this.validateFindParams(params); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+
+        return this.api.makeRequest("tags.json", { query: Endpoint.flattenSearchParams({ search: query }) })
             .then(
                 (response: QueueResponse) => {
                     if (response.data.tags) {
+                        // Yes, this is the inverse of what happens on other endpoints.
+                        // The `tags` wrapper only appears if there are no results
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
-                    } else
-                        return Endpoint.formatAPIResponse(response.status, response.data);
+                    } else return Endpoint.formatAPIResponse(response.status, response.data);
                 },
-                (error: QueueResponse) => {
-                    return Endpoint.formatAPIResponse(error.status, []);
-                }
+                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }
 
+    /**
+     * Fetch user data based on the exact ID or name.  
+     * [b]Important:[/b] Due to a bug in E621's API, requests to this endpoint
+     * may not return JSON if the tag does not exist. If you are not sure, use
+     * `find()` instead, as it does not have that problem.
+     * @param {string} tag Tag name
+     * @returns {FormattedResponse<APITag>} Tag data
+     */
     public get(tag: string): Promise<FormattedResponse<APITag>> {
-        if (typeof tag != "string") return Promise.resolve(null); // TODO Standardize error output
+        if (typeof tag == "object" || typeof tag == "undefined")
+            return Endpoint.makeMalformedRequestResponse();
 
         return this.api.makeRequest(`tags/${tag}.json`)
             .then(
@@ -40,23 +52,18 @@ export class TagsEndpoint extends Endpoint {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = null;
-                    } else
-                        return Endpoint.formatAPIResponse(response.status, response.data);
+                    } else return Endpoint.formatAPIResponse(response.status, response.data);
                 },
-                (error: QueueResponse) => {
-                    return Endpoint.formatAPIResponse(error.status, []);
-                }
+                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }
 
-    protected validateFindParams(params: SearchParams, tags: string | string[]): TagSearchParams {
+    protected validateFindParams(params: TagSearchParams = {}): TagSearchParams {
         const result = super.validateFindParams(params) as TagSearchParams;
 
-        if (!tags) result.name = [];
-        else if (typeof tags == "string") result.name = tags.trim().split(" ").filter(n => n);
-        else if (typeof tags !== "object") result.name = [tags + ""];
-        else if (Array.isArray(tags)) result.name = tags;
-        else throw MalformedRequestError.Params();
+        if (params.name && (Array.isArray(params.name) || Validation.isString(params.name))) result.name = params.name;
+        if (params.category && Validation.isInteger(params.category)) result.category = params.category;
+        if (params.order && Validation.isString(params.order)) result.order = params.order;
 
         return result;
     }
@@ -64,5 +71,16 @@ export class TagsEndpoint extends Endpoint {
 }
 
 interface TagSearchParams extends SearchParams {
-    name?: string[]
+    name?: string | string[]
+    category?: APITagCategory;
+    order?: TagSearchOrder;
+    // has_wiki?: YesNo;
+    // has_artist?: YesNo; // TODO Implement YesNo
+    // hide_empty?: OneZero;
+}
+
+enum TagSearchOrder {
+    Newest = "date",
+    Count = "count",
+    Name = "name",
 }

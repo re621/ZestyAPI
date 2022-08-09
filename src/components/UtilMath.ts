@@ -24,15 +24,6 @@ export class UtilMath {
     }
 
     /**
-     * Determines if the provided string is a number
-     * @param {string} value Value being evaluated
-     * @returns `true` if the value is a number, `false` otherwise
-     */
-    public static isNumeric(value: string): boolean {
-        return !isNaN(Number(value));
-    }
-
-    /**
      * Rounds the provided number to a specified decimal place
      * @param {number} value Value being evaluated
      * @param {number} decimal Decimal place
