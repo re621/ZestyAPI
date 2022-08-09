@@ -5,6 +5,7 @@ import { Validation } from "./components/Validation";
 import { PostEventsEndpoint } from "./endpoints/PostEvents";
 import PostEndpoint from "./endpoints/Posts";
 import { TagsEndpoint } from "./endpoints/Tags";
+import { UserFeedbacksEndpoint } from "./endpoints/UserFeedbacks";
 import UserEndpoint from "./endpoints/Users";
 import { UtilityEndpoint } from "./endpoints/Utility";
 import { MalformedConfigError } from "./error/InitializationError";
@@ -24,6 +25,7 @@ export default class E621 {
     public Posts = new PostEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
     public Users = new UserEndpoint(this);
+    public UserFeedbacks = new UserFeedbacksEndpoint(this);
     public Tags = new TagsEndpoint(this);
 
     public Utility = new UtilityEndpoint(this)
