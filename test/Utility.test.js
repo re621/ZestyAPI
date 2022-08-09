@@ -13,4 +13,10 @@ describe("Utility", () => {
         expect(result.data).toBe(null);
     });
 
+    test("Returns error 404", async () => {
+        const result = await esix.Utility.test404();
+        expect(result.status.code).toBe(404);
+        expect(result.data).toBe(null);
+    });
+
 });

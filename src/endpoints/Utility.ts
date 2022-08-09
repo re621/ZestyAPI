@@ -51,4 +51,12 @@ export class UtilityEndpoint extends Endpoint {
         )
     }
 
+    /** Test command that always returns error 404 */
+    public async test404(): Promise<FormattedResponse<null>> {
+        return this.api.makeRequest("test404").then(
+            (response: QueueResponse) => Endpoint.formatAPIResponse(response.status, response.data),
+            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, null)
+        )
+    }
+
 }
