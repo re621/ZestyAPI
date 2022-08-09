@@ -103,7 +103,7 @@ export default class RequestQueue {
             } catch (error) {
                 currentTask.failure({
                     status: {
-                        code: 400,
+                        code: 490,
                         url: currentTask.request.url,
                         message: ResponseStatusMessage.ProcessingError,
                     },

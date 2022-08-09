@@ -48,7 +48,7 @@ export default class Endpoint {
     protected static makeMalformedRequestResponse(array: boolean = false): Promise<FormattedResponse<any>> {
         return Promise.resolve({
             status: {
-                code: 400,
+                code: 491,
                 message: ResponseStatusMessage.MalformedRequest,
                 url: null,
             },
