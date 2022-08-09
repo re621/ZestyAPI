@@ -1,6 +1,7 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
+import { PostEventsEndpoint } from "./endpoints/PostEvents";
 import PostEndpoint from "./endpoints/Posts";
 import { TagsEndpoint } from "./endpoints/Tags";
 import UserEndpoint from "./endpoints/Users";
@@ -20,6 +21,7 @@ export default class E621 {
 
     // Endpoint declarations
     public Posts = new PostEndpoint(this);
+    public PostEvents = new PostEventsEndpoint(this);
     public Users = new UserEndpoint(this);
     public Tags = new TagsEndpoint(this);
 
