@@ -1,10 +1,10 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import { Validation } from "../components/Validation";
+import Validation from "../components/Validation";
 import { APITag, APITagCategory } from "../responses/APITag";
 
-export class TagsEndpoint extends Endpoint {
+export default class TagsEndpoint extends Endpoint {
 
     public Category = APITagCategory;
 

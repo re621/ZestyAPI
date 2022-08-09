@@ -2,7 +2,7 @@ import Endpoint from "../components/Endpoint";
 import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import Util from "../components/Util";
 
-export class UtilityEndpoint extends Endpoint {
+export default class UtilityEndpoint extends Endpoint {
 
     /**
      * Creates a random string of letters, to be used as an ID.  

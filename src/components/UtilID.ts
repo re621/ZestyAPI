@@ -1,4 +1,4 @@
-export class UtilID {
+export default class UtilID {
 
     private static uniqueIDs: Set<string> = new Set();
 

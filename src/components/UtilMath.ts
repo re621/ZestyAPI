@@ -1,4 +1,4 @@
-export class UtilMath {
+export default class UtilMath {
 
     /**
      * Ensures that the first provided value is bigger than the second, but smaller than the third

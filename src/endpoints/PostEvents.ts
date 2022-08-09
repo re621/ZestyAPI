@@ -1,10 +1,10 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import { Validation } from "../components/Validation";
+import Validation from "../components/Validation";
 import { APIPostEventAction } from "../responses/APIPostEvent";
 
-export class PostEventsEndpoint extends Endpoint {
+export default class PostEventsEndpoint extends Endpoint {
 
     public PostEventAction = APIPostEventAction;
 

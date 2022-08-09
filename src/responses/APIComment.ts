@@ -1,6 +1,6 @@
-import { APIResponse } from "./APIResponse";
+import APIResponse from "./APIResponse";
 
-export interface APIComment extends APIResponse {
+export default interface APIComment extends APIResponse {
     id: number;
     created_at: string;
     post_id: number;

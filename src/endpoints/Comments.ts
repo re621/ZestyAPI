@@ -1,10 +1,10 @@
 import Endpoint, { QueryParams, SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import { Validation } from "../components/Validation";
+import Validation from "../components/Validation";
 import { APIComment } from "../responses/APIComment";
 
-export class CommentsEndpoint extends Endpoint {
+export default class CommentsEndpoint extends Endpoint {
 
     public async find(search: CommentSearchParams): Promise<FormattedResponse<APIComment>> {
 

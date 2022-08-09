@@ -1,4 +1,4 @@
-import { APIResponse } from "./APIResponse";
+import APIResponse from "./APIResponse";
 
 export interface APIUser extends APIResponse {
     id: number;

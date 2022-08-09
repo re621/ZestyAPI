@@ -1,15 +1,16 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
-import { Validation } from "./components/Validation";
-import { CommentsEndpoint } from "./endpoints/Comments";
-import { PostEventsEndpoint } from "./endpoints/PostEvents";
-import PostEndpoint from "./endpoints/Posts";
-import { TagAliasesEndpoint, TagImplicationsEndpoint } from "./endpoints/TagAliases";
-import { TagsEndpoint } from "./endpoints/Tags";
-import { UserFeedbacksEndpoint } from "./endpoints/UserFeedbacks";
-import UserEndpoint from "./endpoints/Users";
-import { UtilityEndpoint } from "./endpoints/Utility";
+import Validation from "./components/Validation";
+import CommentsEndpoint from "./endpoints/Comments";
+import PostEventsEndpoint from "./endpoints/PostEvents";
+import PostsEndpoint from "./endpoints/Posts";
+import TagAliasesEndpoint from "./endpoints/TagAliases";
+import TagImplicationsEndpoint from "./endpoints/TagImplications";
+import TagsEndpoint from "./endpoints/Tags";
+import UserFeedbacksEndpoint from "./endpoints/UserFeedbacks";
+import UsersEndpoint from "./endpoints/Users";
+import UtilityEndpoint from "./endpoints/Utility";
 import { MalformedConfigError } from "./error/InitializationError";
 
 export default class E621 {
@@ -25,12 +26,12 @@ export default class E621 {
 
     // Endpoint declarations
     public Comments = new CommentsEndpoint(this);
-    public Posts = new PostEndpoint(this);
+    public Posts = new PostsEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
     public Tags = new TagsEndpoint(this);
     public TagAliases = new TagAliasesEndpoint(this);
     public TagImplications = new TagImplicationsEndpoint(this);
-    public Users = new UserEndpoint(this);
+    public Users = new UsersEndpoint(this);
     public UserFeedbacks = new UserFeedbacksEndpoint(this);
     public Utility = new UtilityEndpoint(this)
 

@@ -1,6 +1,6 @@
-import { APIResponse } from "./APIResponse";
+import APIResponse from "./APIResponse";
 
-export interface APIFeedback extends APIResponse {
+export default interface APIFeedback extends APIResponse {
     id: number;
     user_id: number,
     creator_id: number,

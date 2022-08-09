@@ -1,6 +1,6 @@
-import { APIResponse } from "./APIResponse";
+import APIResponse from "./APIResponse";
 
-export interface APIPostEvent extends APIResponse {
+export default interface APIPostEvent extends APIResponse {
     id: number,
     creator_id: number,
     post_id: number,

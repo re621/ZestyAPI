@@ -1,5 +1,5 @@
-import { UtilID } from "./UtilID";
-import { UtilMath } from "./UtilMath";
+import UtilID from "./UtilID";
+import UtilMath from "./UtilMath";
 
 export default class Util {
 

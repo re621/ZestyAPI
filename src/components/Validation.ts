@@ -1,5 +1,5 @@
 
-export class Validation {
+export default class Validation {
 
     /**
      * Checks if the provided value is a string

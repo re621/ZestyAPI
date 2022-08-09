@@ -1,11 +1,11 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import { Validation } from "../components/Validation";
+import Validation from "../components/Validation";
 import E621 from "../E621";
 import { APIUser, APIUserLevel } from "../responses/APIUser";
 
-export default class UserEndpoint extends Endpoint {
+export default class UsersEndpoint extends Endpoint {
 
     public UserLevel = APIUserLevel;
     public SearchOrder = UserSearchOrder;
