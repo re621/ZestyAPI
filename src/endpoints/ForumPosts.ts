@@ -36,7 +36,7 @@ export default class ForumPostsEndpoint extends Endpoint {
         if (params.topic_title_matches && Validation.isString(params.topic_title_matches)) results.topic_title_matches = params.topic_title_matches;
         if (params.body_matches && Validation.isString(params.body_matches)) results.body_matches = params.body_matches;
         if (params.creator_name && Validation.isString(params.creator_name)) results.creator_name = params.creator_name;
-        if (params.category_id && Validation.isInteger(params.category_id)) results.category_id = params.category_id;
+        if (params.topic_category_id && Validation.isInteger(params.topic_category_id)) results.topic_category_id = params.topic_category_id;
 
         return results;
     }
@@ -47,5 +47,5 @@ interface ForumPostSearchParams extends SearchParams {
     topic_title_matches?: string,
     body_matches?: string,
     creator_name?: string,
-    category_id?: APIForumCategoryID,
+    topic_category_id?: APIForumCategoryID,
 }
