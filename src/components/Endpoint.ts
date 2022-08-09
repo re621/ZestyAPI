@@ -47,7 +47,7 @@ export default class Endpoint {
      * @returns {SearchParams} Validated parameters
      */
     protected validateSearchParams(params: SearchParams = {}): SearchParams {
-        return params;
+        return {};
     }
 
     /**
@@ -104,7 +104,7 @@ export default class Endpoint {
         let result: StringMap = {};
 
         for (const [key, value] of Object.entries(params)) {
-            result = processValue(result, key, value, keyReplacement, separator, []);
+            processValue(result, key, value, keyReplacement, separator, []);
         }
 
         return result;
@@ -116,9 +116,9 @@ export default class Endpoint {
             keyReplacement: StringMap = {},
             separator = ",",
             keyStack: string[] = [],
-        ): StringMap {
+        ): void {
 
-            if (value == null || typeof value == "undefined" || value == "") return obj;
+            if (value === null || typeof value === "undefined" || value === "") return;
             if (keyReplacement[key]) key = keyReplacement[key];
 
             // Array
@@ -126,14 +126,14 @@ export default class Endpoint {
                 if (value.length == 0) return;
                 value = Util.encodeArray(value);
                 obj[formatKey(key, keyStack)] = value.join(separator);
-                return obj;
+                return;
             }
 
             // Primitive type
             if (typeof value !== "object") {
                 value = Util.encode(value);
-                obj[formatKey(key, keyStack)] = value + "";
-                return obj;
+                obj[formatKey(key, keyStack)] = value;
+                return;
             }
 
             // Object (recursive)
@@ -142,13 +142,11 @@ export default class Endpoint {
                 processValue(obj, key2, value2, keyReplacement, separator, keyStack);
             }
 
-            return obj;
-
             function formatKey(key: string, keyStack = []) {
                 if (keyStack.length == 0) return key;
                 else {
-                    let result = keyStack.shift();
-                    for (const parentKey of keyStack)
+                    let result = keyStack[0];
+                    for (const parentKey of keyStack.slice(1))
                         result += "[" + parentKey + "]";
                     result += "[" + key + "]";
                     return result;
