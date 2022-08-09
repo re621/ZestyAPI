@@ -2,7 +2,7 @@ import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
-import { APIFeedback, APIFeedbackCategory } from "../responses/APIFeedback";
+import APIFeedback, { APIFeedbackCategory } from "../responses/APIFeedback";
 
 export default class UserFeedbacksEndpoint extends Endpoint {
 

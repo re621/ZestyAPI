@@ -1,6 +1,6 @@
 import APIResponse from "./APIResponse";
 
-export interface APIUser extends APIResponse {
+export default interface APIUser extends APIResponse {
     id: number;
     created_at: string;
     name: string;

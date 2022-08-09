@@ -1,5 +1,5 @@
 import E621 from "../E621";
-import { APIResponse } from "../responses/APIResponse";
+import APIResponse from "../responses/APIResponse";
 import { FormattedResponse, ResponseStatus, ResponseStatusMessage } from "./RequestQueue";
 import Util, { PrimitiveMap, PrimitiveType, StringMap } from "./Util";
 

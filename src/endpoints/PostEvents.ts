@@ -2,13 +2,13 @@ import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
-import { APIPostEventAction } from "../responses/APIPostEvent";
+import APIPostEvent, { APIPostEventAction } from "../responses/APIPostEvent";
 
 export default class PostEventsEndpoint extends Endpoint {
 
     public PostEventAction = APIPostEventAction;
 
-    public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<any>> {
+    public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<APIPostEvent[]>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;

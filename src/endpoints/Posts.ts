@@ -2,7 +2,7 @@ import Endpoint, { QueryParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
 import { MalformedRequestError } from "../error/RequestError";
-import { APIPost } from "../responses/APIPost";
+import APIPost from "../responses/APIPost";
 
 export default class PostsEndpoint extends Endpoint {
 

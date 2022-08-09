@@ -1,5 +1,5 @@
 import { FormattedResponse } from "../components/RequestQueue";
-import { APITagAlias, APITagAliasStatus } from "../responses/APITagAlias";
+import APITagAlias, { APITagAliasStatus } from "../responses/APITagAlias";
 import TagRelationshipsEndpoint, { TagRelationshipSearchParams } from "./TagRelationships";
 
 export default class TagImplicationsEndpoint extends TagRelationshipsEndpoint {

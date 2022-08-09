@@ -3,7 +3,7 @@ import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../comp
 import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import { APITagCategory } from "../responses/APITag";
-import { APITagAlias, APITagAliasStatus } from "../responses/APITagAlias";
+import APITagAlias, { APITagAliasStatus } from "../responses/APITagAlias";
 
 export default class TagRelationshipsEndpoint extends Endpoint {
 

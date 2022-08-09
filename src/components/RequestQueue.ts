@@ -1,5 +1,5 @@
 import crossFetch, { Request as CrossRequest } from "cross-fetch";
-import { APIResponse } from "../responses/APIResponse";
+import APIResponse from "../responses/APIResponse";
 import Logger from "./Logger";
 import Util from "./Util";
 

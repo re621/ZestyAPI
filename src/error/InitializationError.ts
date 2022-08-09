@@ -1,4 +1,3 @@
-
 export default class InitializationError extends Error {
     public constructor(message: string) {
         super(message);

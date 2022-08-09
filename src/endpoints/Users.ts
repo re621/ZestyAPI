@@ -3,7 +3,7 @@ import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../comp
 import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import E621 from "../E621";
-import { APIUser, APIUserLevel } from "../responses/APIUser";
+import APIUser, { APIUserLevel } from "../responses/APIUser";
 
 export default class UsersEndpoint extends Endpoint {
 
