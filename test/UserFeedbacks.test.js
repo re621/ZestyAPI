@@ -41,7 +41,7 @@ describe("UserFeedbacks", () => {
         const result = await esix.UserFeedbacks.find({ body_matches: "rickrolling" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThanOrEqual(1);
-    });
+    }, 10000);
     test("Fetch feedback (by category)", async () => {
         const result = await esix.UserFeedbacks.find({ category: esix.UserFeedbacks.FeedbackCategory.Positive });
         expect(result.status.code).toBe(200);
