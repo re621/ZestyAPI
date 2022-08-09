@@ -6,6 +6,7 @@ import CommentsEndpoint from "./endpoints/Comments";
 import PoolsEndpoint from "./endpoints/Pools";
 import PostEventsEndpoint from "./endpoints/PostEvents";
 import PostsEndpoint from "./endpoints/Posts";
+import PostSets from "./endpoints/PostSets";
 import TagAliasesEndpoint from "./endpoints/TagAliases";
 import TagImplicationsEndpoint from "./endpoints/TagImplications";
 import TagsEndpoint from "./endpoints/Tags";
@@ -30,6 +31,7 @@ export default class E621 {
     public Pools = new PoolsEndpoint(this);
     public Posts = new PostsEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
+    public PostSets = new PostSets(this);
     public Tags = new TagsEndpoint(this);
     public TagAliases = new TagAliasesEndpoint(this);
     public TagImplications = new TagImplicationsEndpoint(this);
