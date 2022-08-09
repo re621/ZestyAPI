@@ -6,6 +6,15 @@ import APIPostSet from "../responses/APIPostSet";
 
 export default class PostSetsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Note that the parameters are different from Pools
+    - Non-standard order parameter values: `postcount` and `update` instead of `post_count` and `updated_at`
+    - Unlike Pools, returns an empty object `{ post_sets: [] }` when no results are found
+
+    */
+
     /**
      * Fetches pool data based on provided parameters
      * @param {PoolSearchParams} search Search parameters
@@ -31,6 +40,8 @@ export default class PostSetsEndpoint extends Endpoint {
                 (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }
+
+    // TODO get()
 
     protected validateSearchParams(params: PostSetSearchParams = {}): PostSetSearchParams {
         const result = super.validateSearchParams(params) as PostSetSearchParams;

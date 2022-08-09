@@ -6,6 +6,13 @@ import APIPostEvent, { APIPostEventAction } from "../responses/APIPostEvent";
 
 export default class PostEventsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Returns an empty object `{ post_events: [] }` when no results are found in a search
+
+    */
+
     public PostEventAction = APIPostEventAction;
 
     public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<APIPostEvent[]>> {

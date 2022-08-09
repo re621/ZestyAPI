@@ -6,6 +6,16 @@ import APIPost from "../responses/APIPost";
 
 export default class PostsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - No search parameters, everything is in query parameters
+    - Output is wrapped in `{ posts: [] }` when searching for multiple posts (ex. `/posts.json`)
+    - Output is wrapped in `{ post: {} }` when searching for one post (ex. `/posts/12345.json`)
+    - Returns an empty object `{ posts: [] }` when no results are found in a search
+
+    */
+
     /**
      * Search for posts with specified tags.  
      * Note that the hard limit for this request is 40 tags.  

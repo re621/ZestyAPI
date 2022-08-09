@@ -6,6 +6,15 @@ import APIComment from "../responses/APIComment";
 
 export default class CommentsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Output format changes depending on `group_by` parameter, with `post` being the default.
+    - `group_by: post` does not actually work with the search, use `comment` instead
+    - Returns an empty object `{ comments: [] }` when no results are found in a search
+
+    */
+
     public async find(search: CommentSearchParams): Promise<FormattedResponse<APIComment>> {
 
         const query = this.splitQueryParams(search);
@@ -26,6 +35,8 @@ export default class CommentsEndpoint extends Endpoint {
                 (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }
+
+    // TODO get()
 
     protected validateSearchParams(params: CommentSearchParams = {}): CommentSearchParams {
         const result = super.validateSearchParams(params) as CommentSearchParams;

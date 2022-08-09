@@ -6,6 +6,13 @@ import { APITag, APITagCategory } from "../responses/APITag";
 
 export default class TagsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Returns an empty object `{ tags: [] }` when no results are found in a search
+
+    */
+
     public Category = APITagCategory;
 
     /**

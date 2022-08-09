@@ -6,6 +6,13 @@ import APIFeedback, { APIFeedbackCategory } from "../responses/APIFeedback";
 
 export default class UserFeedbacksEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Returns an empty object `{ user_feedbacks: [] }` when no results are found in a search
+
+    */
+
     public FeedbackCategory = APIFeedbackCategory;
 
     public find(search: UserFeedbacksSearchParams = {}): Promise<FormattedResponse<APIFeedback[]>> {

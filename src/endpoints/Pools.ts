@@ -6,6 +6,14 @@ import APIPool, { APIPoolCategory } from "../responses/APIPool";
 
 export default class PoolsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Note that the parameters are different from PostSets
+    - Unlike PostSets, returns an empty array `[]` instead of an empty object when no results are found
+
+    */
+
     public PoolCategory = APIPoolCategory;
 
     /**
@@ -33,6 +41,8 @@ export default class PoolsEndpoint extends Endpoint {
                 (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }
+
+    // TODO get()
 
     protected validateSearchParams(params: PoolSearchParams = {}): PoolSearchParams {
         const result = super.validateSearchParams(params) as PoolSearchParams;

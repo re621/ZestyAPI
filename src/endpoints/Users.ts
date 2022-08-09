@@ -7,6 +7,13 @@ import APIUser, { APIUserLevel } from "../responses/APIUser";
 
 export default class UsersEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Returns an empty array `[]` instead of an empty object when no results are found
+
+    */
+
     public UserLevel = APIUserLevel;
     public SearchOrder = UserSearchOrder;
 
