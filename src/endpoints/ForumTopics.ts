@@ -6,6 +6,13 @@ import { APIForumCategoryID, APIForumTopic } from "../responses/APIForumTopic";
 
 export default class ForumTopicsEndpoint extends Endpoint {
 
+    /*
+    Endpoint Notes
+
+    - Returns an empty array `[]` instead of an empty object when no results are found
+
+    */
+
     public ForumCategory = APIForumCategoryID;
 
     public async find(search: ForumTopicSearchParams = {}): Promise<FormattedResponse<APIForumTopic[]>> {
@@ -18,7 +25,7 @@ export default class ForumTopicsEndpoint extends Endpoint {
         return this.api.makeRequest("forum_topics.json", { query: Endpoint.flattenParams(lookup) })
             .then(
                 (response: QueueResponse) => {
-                    if (response.data.forum_posts) {
+                    if (!response.data || response.data.length == 0) {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];

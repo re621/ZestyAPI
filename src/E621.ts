@@ -16,6 +16,7 @@ import TagsEndpoint from "./endpoints/Tags";
 import UserFeedbacksEndpoint from "./endpoints/UserFeedbacks";
 import UsersEndpoint from "./endpoints/Users";
 import UtilityEndpoint from "./endpoints/Utility";
+import WikiPagesEndpoint from "./endpoints/WikiPages";
 import { MalformedConfigError } from "./error/InitializationError";
 
 export default class E621 {
@@ -44,6 +45,7 @@ export default class E621 {
     public Users = new UsersEndpoint(this);
     public UserFeedbacks = new UserFeedbacksEndpoint(this);
     public Utility = new UtilityEndpoint(this)
+    public WikiPages = new WikiPagesEndpoint(this);
 
     private constructor(config: APIConfig) {
         // User Agent
