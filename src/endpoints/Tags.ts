@@ -27,7 +27,8 @@ export class TagsEndpoint extends Endpoint {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
-                    } else return Endpoint.formatAPIResponse(response.status, response.data);
+                    }
+                    return Endpoint.formatAPIResponse(response.status, response.data);
                 },
                 (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
@@ -52,7 +53,8 @@ export class TagsEndpoint extends Endpoint {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = null;
-                    } else return Endpoint.formatAPIResponse(response.status, response.data);
+                    }
+                    return Endpoint.formatAPIResponse(response.status, response.data);
                 },
                 (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
