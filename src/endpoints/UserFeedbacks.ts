@@ -1,10 +1,9 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { FormattedResponse } from "../components/RequestQueue";
 import Validation from "../components/Validation";
-import APIFeedback, { APIFeedbackCategory } from "../responses/APIFeedback";
+import APIUserFeedback, { APIFeedbackCategory } from "../responses/APIUserFeedback";
 
-export default class UserFeedbacksEndpoint extends Endpoint {
+export default class UserFeedbacksEndpoint extends Endpoint<APIUserFeedback> {
 
     /*
     Endpoint Notes
@@ -14,27 +13,8 @@ export default class UserFeedbacksEndpoint extends Endpoint {
     */
 
     public FeedbackCategory = APIFeedbackCategory;
-
-    public find(search: UserFeedbacksSearchParams = {}): Promise<FormattedResponse<APIFeedback[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest("user_feedbacks.json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data.user_feedbacks) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    protected endpoint = "user_feedbacks";
+    public find(search: UserFeedbacksSearchParams = {}): Promise<FormattedResponse<APIUserFeedback[]>> { return super.find(search); }
 
     protected validateSearchParams(params: UserFeedbacksSearchParams = {}): UserFeedbacksSearchParams {
         const result = super.validateSearchParams(params) as UserFeedbacksSearchParams;

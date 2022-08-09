@@ -1,14 +1,38 @@
 import E621 from "../E621";
 import APIResponse from "../responses/APIResponse";
-import { FormattedResponse, ResponseStatus, ResponseStatusMessage } from "./RequestQueue";
+import { FormattedResponse, QueueResponse, ResponseStatus, ResponseStatusMessage } from "./RequestQueue";
 import Util, { PrimitiveMap, PrimitiveType, StringMap } from "./Util";
 
-export default class Endpoint {
+export default class Endpoint<T extends APIResponse> {
 
     protected api: E621;
 
+    // Variables used in the inherited `find()` method.
+    protected endpoint: string = "unknown";     // determines the URL of the endpoint (without .json)
+
     constructor(api: E621) {
         this.api = api;
+    }
+
+    public async find(search: SearchParams = {}): Promise<FormattedResponse<T[]>> {
+
+        const query = this.splitQueryParams(search);
+        let lookup: PrimitiveMap;
+        try { lookup = this.validateParams(search, query); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+
+        return this.api.makeRequest(this.endpoint + ".json", { query: Endpoint.flattenParams(lookup) })
+            .then(
+                (response: QueueResponse) => {
+                    if (response.data[this.endpoint]) {
+                        response.status.code = 404;
+                        response.status.message = ResponseStatusMessage.NotFound;
+                        response.data = [];
+                    }
+                    return Endpoint.formatAPIResponse(response.status, response.data);
+                },
+                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
+            );
     }
 
     /**

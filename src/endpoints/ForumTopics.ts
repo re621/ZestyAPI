@@ -4,7 +4,7 @@ import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import { APIForumCategoryID, APIForumTopic } from "../responses/APIForumTopic";
 
-export default class ForumTopicsEndpoint extends Endpoint {
+export default class ForumTopicsEndpoint extends Endpoint<APIForumTopic> {
 
     /*
     Endpoint Notes

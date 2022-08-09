@@ -1,8 +1,9 @@
 import Endpoint from "../components/Endpoint";
 import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import Util from "../components/Util";
+import APIResponse from "../responses/APIResponse";
 
-export default class UtilityEndpoint extends Endpoint {
+export default class UtilityEndpoint extends Endpoint<APIResponse> {
 
     /**
      * Creates a random string of letters, to be used as an ID.  

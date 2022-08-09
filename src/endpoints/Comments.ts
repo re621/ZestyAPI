@@ -1,10 +1,9 @@
 import Endpoint, { QueryParams, SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { FormattedResponse } from "../components/RequestQueue";
 import Validation from "../components/Validation";
 import APIComment from "../responses/APIComment";
 
-export default class CommentsEndpoint extends Endpoint {
+export default class CommentsEndpoint extends Endpoint<APIComment> {
 
     /*
     Endpoint Notes
@@ -15,26 +14,8 @@ export default class CommentsEndpoint extends Endpoint {
 
     */
 
-    public async find(search: CommentSearchParams = {}): Promise<FormattedResponse<APIComment[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest("comments.json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data.comments) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    protected endpoint = "comments";
+    public find(search: CommentSearchParams = {}): Promise<FormattedResponse<APIComment[]>> { return super.find(search); }
 
     // TODO get()
 

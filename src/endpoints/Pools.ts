@@ -4,7 +4,7 @@ import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import APIPool, { APIPoolCategory } from "../responses/APIPool";
 
-export default class PoolsEndpoint extends Endpoint {
+export default class PoolsEndpoint extends Endpoint<APIPool> {
 
     /*
     Endpoint Notes
@@ -31,7 +31,7 @@ export default class PoolsEndpoint extends Endpoint {
         return this.api.makeRequest("pools.json", { query: Endpoint.flattenParams(lookup) })
             .then(
                 (response: QueueResponse) => {
-                    if (!response.data) {
+                    if (!response.data || response.data.length == 0) {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];

@@ -4,7 +4,7 @@ import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import APIPostEvent, { APIPostEventAction } from "../responses/APIPostEvent";
 
-export default class PostEventsEndpoint extends Endpoint {
+export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
 
     /*
     Endpoint Notes
@@ -32,9 +32,7 @@ export default class PostEventsEndpoint extends Endpoint {
                     } else response.data = response.data.post_events;
                     return Endpoint.formatAPIResponse(response.status, response.data);
                 },
-                (error: QueueResponse) => {
-                    return Endpoint.formatAPIResponse(error.status, []);
-                }
+                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }
 

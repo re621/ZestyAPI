@@ -1,10 +1,9 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import { APITag, APITagCategory } from "../responses/APITag";
 
-export default class TagsEndpoint extends Endpoint {
+export default class TagsEndpoint extends Endpoint<APITag> {
 
     /*
     Endpoint Notes
@@ -14,32 +13,8 @@ export default class TagsEndpoint extends Endpoint {
     */
 
     public Category = APITagCategory;
-
-    /**
-     * Fetches tag data based on provided parameters
-     * @param {TagSearchParams} params Search parameters
-     * @returns {FormattedResponse<APITag[]>} Tag data
-     */
-    public find(search: TagSearchParams = {}): Promise<FormattedResponse<APITag[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest("tags.json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data.tags) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    protected endpoint = "tags";
+    public find(search: TagSearchParams = {}): Promise<FormattedResponse<APITag[]>> { return super.find(search); }
 
     /**
      * Fetch user data based on the exact ID or name.  

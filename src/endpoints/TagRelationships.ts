@@ -1,32 +1,12 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { FormattedResponse } from "../components/RequestQueue";
 import Validation from "../components/Validation";
 import { APITagCategory } from "../responses/APITag";
 import APITagAlias, { APITagAliasStatus } from "../responses/APITagAlias";
 
-export default class TagRelationshipsEndpoint extends Endpoint {
+export default class TagRelationshipsEndpoint extends Endpoint<APITagAlias> {
 
-    public commonFind(endpoint: "tag_aliases" | "tag_implications", search: TagRelationshipSearchParams = {}): Promise<FormattedResponse<APITagAlias[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest(endpoint + ".json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data[endpoint]) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    public find(search: TagRelationshipSearchParams = {}): Promise<FormattedResponse<APITagAlias[]>> { return super.find(search); }
 
     protected validateSearchParams(params: TagRelationshipSearchParams): TagRelationshipSearchParams {
         const result = super.validateSearchParams(params) as TagRelationshipSearchParams;

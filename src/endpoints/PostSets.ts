@@ -1,10 +1,9 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { FormattedResponse } from "../components/RequestQueue";
 import Validation from "../components/Validation";
 import APIPostSet from "../responses/APIPostSet";
 
-export default class PostSetsEndpoint extends Endpoint {
+export default class PostSetsEndpoint extends Endpoint<APIPostSet> {
 
     /*
     Endpoint Notes
@@ -15,31 +14,8 @@ export default class PostSetsEndpoint extends Endpoint {
 
     */
 
-    /**
-     * Fetches pool data based on provided parameters
-     * @param {PoolSearchParams} search Search parameters
-     * @returns {FormattedResponse<APIPostSet[]>} Tag data
-     */
-    public find(search: PostSetSearchParams = {}): Promise<FormattedResponse<APIPostSet[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest("post_sets.json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data.post_sets) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    protected endpoint = "post_sets";
+    public find(search: PostSetSearchParams = {}): Promise<FormattedResponse<APIPostSet[]>> { return super.find(search); }
 
     // TODO get()
 

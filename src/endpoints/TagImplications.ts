@@ -1,6 +1,5 @@
-import { FormattedResponse } from "../components/RequestQueue";
-import APITagAlias, { APITagAliasStatus } from "../responses/APITagAlias";
-import TagRelationshipsEndpoint, { TagRelationshipSearchParams } from "./TagRelationships";
+import { APITagAliasStatus } from "../responses/APITagAlias";
+import TagRelationshipsEndpoint from "./TagRelationships";
 
 export default class TagImplicationsEndpoint extends TagRelationshipsEndpoint {
 
@@ -13,9 +12,6 @@ export default class TagImplicationsEndpoint extends TagRelationshipsEndpoint {
     */
 
     public ImplicationStatus = APITagAliasStatus;
-
-    public find(params: TagRelationshipSearchParams = {}): Promise<FormattedResponse<APITagAlias[]>> {
-        return super.commonFind("tag_implications", params);
-    }
+    protected endpoint = "tag_implications";
 
 }

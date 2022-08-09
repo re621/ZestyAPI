@@ -4,7 +4,7 @@ import { PrimitiveMap } from "../components/Util";
 import Validation from "../components/Validation";
 import { APIWikiPage } from "../responses/APIWikiPage";
 
-export default class WikiPagesEndpoint extends Endpoint {
+export default class WikiPagesEndpoint extends Endpoint<APIWikiPage> {
 
     /*
     Endpoint Notes

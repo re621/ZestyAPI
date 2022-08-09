@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "test": "jest",
-    "testSome": "jest -t Users"
+    "testSome": "jest -t Blips"
   },
   "author": "bitWolfy",
   "license": "GPLv3",

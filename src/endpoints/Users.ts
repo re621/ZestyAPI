@@ -5,7 +5,7 @@ import Validation from "../components/Validation";
 import E621 from "../E621";
 import APIUser, { APIUserLevel } from "../responses/APIUser";
 
-export default class UsersEndpoint extends Endpoint {
+export default class UsersEndpoint extends Endpoint<APIUser> {
 
     /*
     Endpoint Notes

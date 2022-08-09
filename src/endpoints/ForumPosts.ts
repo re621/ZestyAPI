@@ -1,11 +1,10 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { FormattedResponse } from "../components/RequestQueue";
 import Validation from "../components/Validation";
 import { APIForumPost } from "../responses/APIForumPost";
 import { APIForumCategoryID } from "../responses/APIForumTopic";
 
-export default class ForumPostsEndpoint extends Endpoint {
+export default class ForumPostsEndpoint extends Endpoint<APIForumPost> {
 
     /*
     Endpoint Notes
@@ -15,27 +14,8 @@ export default class ForumPostsEndpoint extends Endpoint {
     */
 
     public ForumCategory = APIForumCategoryID;
-
-    public async find(search: ForumPostSearchParams = {}): Promise<FormattedResponse<APIForumPost[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest("forum_posts.json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data.forum_posts) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    protected endpoint = "forum_posts";
+    public find(search: ForumPostSearchParams = {}): Promise<FormattedResponse<APIForumPost[]>> { return super.find(search); }
 
     protected validateSearchParams(params: ForumPostSearchParams = {}): ForumPostSearchParams {
         const results = super.validateSearchParams(params) as ForumPostSearchParams;

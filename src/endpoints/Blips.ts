@@ -1,10 +1,9 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { FormattedResponse } from "../components/RequestQueue";
 import Validation from "../components/Validation";
 import { APIBlip } from "../responses/APIBlip";
 
-export default class BlipsEndpoint extends Endpoint {
+export default class BlipsEndpoint extends Endpoint<APIBlip> {
 
     /*
     Endpoint Notes
@@ -13,26 +12,8 @@ export default class BlipsEndpoint extends Endpoint {
 
     */
 
-    public async find(search: BlipSearchParams = {}): Promise<FormattedResponse<APIBlip[]>> {
-
-        const query = this.splitQueryParams(search);
-        let lookup: PrimitiveMap;
-        try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
-
-        return this.api.makeRequest("blips.json", { query: Endpoint.flattenParams(lookup) })
-            .then(
-                (response: QueueResponse) => {
-                    if (response.data.blips) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = [];
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
-                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
-            );
-    }
+    protected endpoint = "blips";
+    public find(search: BlipSearchParams = {}): Promise<FormattedResponse<APIBlip[]>> { return super.find(search); }
 
     protected validateSearchParams(params: BlipSearchParams = {}): BlipSearchParams {
         const results = super.validateSearchParams(params) as BlipSearchParams;
