@@ -15,7 +15,7 @@ export default class CommentsEndpoint extends Endpoint {
 
     */
 
-    public async find(search: CommentSearchParams): Promise<FormattedResponse<APIComment>> {
+    public async find(search: CommentSearchParams): Promise<FormattedResponse<APIComment[]>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
