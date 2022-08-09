@@ -23,11 +23,6 @@ describe("Comments", () => {
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
     });
-    test("Fetch comments (hidden)", async () => {
-        const result = await esix.Comments.find({ is_hidden: true });
-        expect(result.status.code).toBe(403);
-        expect(result.data.length).toBe(0);
-    });
     test("Fetch comments (sticky)", async () => {
         const result = await esix.Comments.find({ is_sticky: true });
         expect(result.status.code).toBe(200);

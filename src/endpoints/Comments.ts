@@ -33,7 +33,6 @@ export default class CommentsEndpoint extends Endpoint {
         if (params.creator_name && Validation.isString(params.creator_name)) result.creator_name = params.creator_name;
         if (params.body_matches && Validation.isString(params.body_matches)) result.body_matches = params.body_matches;
         if (params.post_tag_match && Validation.isString(params.post_tag_match)) result.post_tag_match = params.post_tag_match;
-        if (Validation.isBoolean(params.is_hidden)) result.is_hidden = params.is_hidden;
         if (Validation.isBoolean(params.is_sticky)) result.is_sticky = params.is_sticky;
         if (params.order && Validation.isString(params.order)) result.order = params.order;
 
@@ -52,7 +51,6 @@ interface CommentSearchParams extends SearchParams {
     creator_name?: string,
     body_matches?: string,
     post_tag_match?: string,
-    is_hidden?: boolean,
     is_sticky?: boolean,
     order?: CommentSearchOrder,
 }
