@@ -4,6 +4,7 @@ import Util, { PrimitiveType } from "./components/Util";
 import { Validation } from "./components/Validation";
 import { PostEventsEndpoint } from "./endpoints/PostEvents";
 import PostEndpoint from "./endpoints/Posts";
+import { TagAliasesEndpoint, TagImplicationsEndpoint } from "./endpoints/TagAliases";
 import { TagsEndpoint } from "./endpoints/Tags";
 import { UserFeedbacksEndpoint } from "./endpoints/UserFeedbacks";
 import UserEndpoint from "./endpoints/Users";
@@ -27,6 +28,8 @@ export default class E621 {
     public Users = new UserEndpoint(this);
     public UserFeedbacks = new UserFeedbacksEndpoint(this);
     public Tags = new TagsEndpoint(this);
+    public TagAliases = new TagAliasesEndpoint(this);
+    public TagImplications = new TagImplicationsEndpoint(this);
 
     public Utility = new UtilityEndpoint(this)
 
