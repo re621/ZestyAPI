@@ -3,6 +3,7 @@ import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
 import Validation from "./components/Validation";
 import CommentsEndpoint from "./endpoints/Comments";
+import PoolsEndpoint from "./endpoints/Pools";
 import PostEventsEndpoint from "./endpoints/PostEvents";
 import PostsEndpoint from "./endpoints/Posts";
 import TagAliasesEndpoint from "./endpoints/TagAliases";
@@ -26,6 +27,7 @@ export default class E621 {
 
     // Endpoint declarations
     public Comments = new CommentsEndpoint(this);
+    public Pools = new PoolsEndpoint(this);
     public Posts = new PostsEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
     public Tags = new TagsEndpoint(this);
