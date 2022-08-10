@@ -31,8 +31,8 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
         if (params.order && Validation.isString(params.order)) result.order = params.order;
 
         // Derived
-        if (params.id && Validation.isInteger(params.id)) result.id = params.id;
-        if (params.post_id && Validation.isInteger(params.post_id)) result.post_id = params.post_id;
+        if (params.id && (Array.isArray(params.id) || Validation.isInteger(params.id))) result.id = params.id;
+        if (params.post_id && (Array.isArray(params.post_id) || Validation.isInteger(params.post_id))) result.post_id = params.post_id;
         if (params.creator_id && Validation.isInteger(params.creator_id)) result.creator_id = params.creator_id;
 
         return result;
@@ -56,8 +56,8 @@ interface CommentSearchParams extends SearchParams {
     order?: CommentSearchOrder,
 
     // Derived
-    id?: number,
-    post_id?: number,
+    id?: number | number[],
+    post_id?: number | number[],
     creator_id?: number,
 }
 
