@@ -25,14 +25,26 @@ export default class ForumPostsEndpoint extends Endpoint<APIForumPost> {
         if (params.creator_name && Validation.isString(params.creator_name)) results.creator_name = params.creator_name;
         if (params.topic_category_id && Validation.isInteger(params.topic_category_id)) results.topic_category_id = params.topic_category_id;
 
+        if (params.id && Validation.isInteger(params.id)) results.id = params.id;
+        if (params.creator_id && Validation.isInteger(params.creator_id)) results.creator_id = params.creator_id;
+        if (params.topic_id && Validation.isInteger(params.topic_id)) results.topic_id = params.topic_id;
+        if (Validation.isBoolean(params.is_hidden)) results.is_hidden = params.is_hidden;
+
         return results;
     }
 
 }
 
 interface ForumPostSearchParams extends SearchParams {
+    // Native
     topic_title_matches?: string,
     body_matches?: string,
     creator_name?: string,
     topic_category_id?: APIForumCategoryID,
+
+    // Derived
+    id?: number;
+    creator_id?: number;
+    topic_id?: number;
+    is_hidden?: boolean;
 }

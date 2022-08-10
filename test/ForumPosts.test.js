@@ -30,5 +30,32 @@ describe("ForumPosts", () => {
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
     });
-
+    test("Fetch forum posts (by ID)", async () => {
+        const result = await esix.ForumPosts.find({ id: 12345 });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBe(1);
+        expect(result.data[0].id).toBe(12345);
+    });
+    test("Fetch forum posts (by creator ID)", async () => {
+        const result = await esix.ForumPosts.find({ creator_id: 211960 });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBe(75);
+        expect(result.data[0].creator_id).toBe(211960);
+    });
+    test("Fetch forum posts (by topic ID)", async () => {
+        const result = await esix.ForumPosts.find({ topic_id: 12345 });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBeGreaterThanOrEqual(1);
+        expect(result.data[0].topic_id).toBe(12345);
+    });
+    test("Fetch forum posts (hidden)", async () => {
+        const result = await esix.ForumPosts.find({ is_hidden: true });
+        expect(result.status.code).toBe(404); // BUG This SHOULD return 403, but it doesn't.
+        expect(result.data.length).toBe(0);
+    });
+    test("Fetch forum posts (404)", async () => {
+        const result = await esix.ForumPosts.find({ topic_title_matches: "This Thread Does Not Exist" });
+        expect(result.status.code).toBe(404);
+        expect(result.data.length).toBe(0);
+    });
 });
