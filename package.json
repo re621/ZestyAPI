@@ -4,8 +4,8 @@
   "description": "Comprehensive JS wrapper for e621.net API",
   "main": "dist/ZestyAPI.js",
   "scripts": {
-    "push": "npm version patch --tag-version-prefix='' -m 'Patch %s'&& git push origin '%s'",
-    "push-minor": "npm version minor --tag-version-prefix='' -m 'Version %s'&& git push origin '%s'",
+    "push": "npm version patch --tag-version-prefix='' -m 'Patch %s'&& git push --tags",
+    "push-minor": "npm version minor --tag-version-prefix='' -m 'Version %s'&& git push --tags",
     "build": "webpack",
     "eslint": "npx eslint .",
     "test": "jest",
