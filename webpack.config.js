@@ -3,7 +3,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-    entry: "./src/E621.ts",
+    entry: "./src/ZestyAPI.ts",
     mode: "production",
     module: {
         rules: [

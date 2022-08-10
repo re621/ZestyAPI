@@ -1,18 +1,18 @@
-import E621 from "../E621";
 import APIResponse from "../responses/APIResponse";
+import ZestyAPI from "../ZestyAPI";
 import { FormattedResponse, QueueResponse, ResponseStatus, ResponseStatusMessage } from "./RequestQueue";
 import Util, { PrimitiveMap, PrimitiveType, StringMap } from "./Util";
 
 export default class Endpoint<T extends APIResponse> {
 
-    protected api: E621;
+    protected api: ZestyAPI;
 
     // Variables used in the inherited `find()` method.
     protected endpoint = "unknown";     // determines the URL of the endpoint (without .json)
     protected searchParams: string[] = [];      // list of permitted search parameters
     protected searchParamAliases: { [prop: string]: string } = {};
 
-    constructor(api: E621) {
+    constructor(api: ZestyAPI) {
         this.api = api;
     }
 

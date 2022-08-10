@@ -20,9 +20,9 @@ import UtilityEndpoint from "./endpoints/Utility";
 import WikiPagesEndpoint from "./endpoints/WikiPages";
 import InitializationError from "./error/InitializationError";
 
-export default class E621 {
+export default class ZestyAPI {
 
-    private static instance: E621;
+    private static instance: ZestyAPI;
 
     private userAgent: string;
     private rateLimit: number;
@@ -79,10 +79,10 @@ export default class E621 {
     /**
      * Get an instance of a E621 object, with access to various endpoints
      * @param {APIConfig} config Configuration object. Not necessary if `connect()` was called before.
-     * @returns {E621} E621 object
+     * @returns {ZestyAPI} E621 object
      */
-    public static connect(config?: APIConfig): E621 {
-        if (!this.instance) this.instance = new E621(config);
+    public static connect(config?: APIConfig): ZestyAPI {
+        if (!this.instance) this.instance = new ZestyAPI(config);
         return this.instance;
     }
 
@@ -166,7 +166,7 @@ export default class E621 {
 }
 
 if (typeof process === "undefined")
-    (window as any).E621 = E621;
+    (window as any).ZestyAPI = ZestyAPI;
 
 interface APIConfig {
     userAgent?: string,

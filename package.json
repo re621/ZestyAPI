@@ -7,7 +7,7 @@
     "build": "webpack",
     "eslint": "npx eslint .",
     "test": "jest",
-    "testSome": "jest -t Notes"
+    "testSome": "jest -t Users"
   },
   "author": "bitWolfy",
   "license": "GPLv3",
