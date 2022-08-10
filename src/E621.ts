@@ -6,6 +6,7 @@ import BlipsEndpoint from "./endpoints/Blips";
 import CommentsEndpoint from "./endpoints/Comments";
 import ForumPostsEndpoint from "./endpoints/ForumPosts";
 import ForumTopicsEndpoint from "./endpoints/ForumTopics";
+import IQDBQueriesEndpoint from "./endpoints/IQDBQueries";
 import PoolsEndpoint from "./endpoints/Pools";
 import PostEventsEndpoint from "./endpoints/PostEvents";
 import PostsEndpoint from "./endpoints/Posts";
@@ -35,6 +36,7 @@ export default class E621 {
     public Comments = new CommentsEndpoint(this);
     public ForumPosts = new ForumPostsEndpoint(this);
     public ForumTopics = new ForumTopicsEndpoint(this);
+    public IQDBQueries = new IQDBQueriesEndpoint(this);
     public Pools = new PoolsEndpoint(this);
     public Posts = new PostsEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
