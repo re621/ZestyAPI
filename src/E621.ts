@@ -1,7 +1,6 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
-import Validation from "./components/Validation";
 import BlipsEndpoint from "./endpoints/Blips";
 import CommentsEndpoint from "./endpoints/Comments";
 import ForumPostsEndpoint from "./endpoints/ForumPosts";
@@ -90,12 +89,11 @@ export default class E621 {
     public login(auth: AuthToken | AuthLogin): void {
         this.logout();
         if (typeof auth == "string") {
-            if (!Validation.isString(auth) || auth.length > 250)
-                throw MalformedConfigError.Auth();
+            if (auth.length > 250) throw MalformedConfigError.Auth();
             else this.authToken = auth;
         } else {
-            if (!auth.username || !Validation.isString(auth.username) || auth.username.length > 250
-                || !auth.apiKey || !Validation.isString(auth.apiKey) || auth.apiKey.length > 250)
+            if (!auth.username || typeof auth.username !== "string" || auth.username.length > 250
+                || !auth.apiKey || typeof auth.apiKey !== "string" || auth.apiKey.length > 250)
                 throw MalformedConfigError.Auth();
             else this.authLogin = auth;
         }
