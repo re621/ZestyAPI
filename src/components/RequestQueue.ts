@@ -21,7 +21,7 @@ export default class RequestQueue {
      * @param {number} timeout Timeout before the next request
      * @returns 
      */
-    public static add(requestInfo: string, requestInit?: RequestInit, timeout: number = 500): Promise<any> {
+    public static add(requestInfo: string, requestInit?: RequestInit, timeout = 500): Promise<any> {
         // Hard limit on timeout to prevent being throttled
         if (timeout < 500) timeout = 500;
 
@@ -44,6 +44,7 @@ export default class RequestQueue {
         this.running = true;
 
         let currentTask: QueueItem;
+        // eslint-disable-next-line no-cond-assign
         while (currentTask = this.queue.shift()) {
             try {
                 Logger.connect(currentTask.request.url);

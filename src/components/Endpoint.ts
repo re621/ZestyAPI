@@ -8,7 +8,7 @@ export default class Endpoint<T extends APIResponse> {
     protected api: E621;
 
     // Variables used in the inherited `find()` method.
-    protected endpoint: string = "unknown";     // determines the URL of the endpoint (without .json)
+    protected endpoint = "unknown";     // determines the URL of the endpoint (without .json)
     protected searchParams: string[] = [];      // list of permitted search parameters
     protected searchParamAliases: { [prop: string]: string } = {};
 
@@ -61,7 +61,7 @@ export default class Endpoint<T extends APIResponse> {
     protected validateParams(search: SearchParams = {}, query: QueryParams = {}): PrimitiveMap {
         search = this.validateSearchParams(search);
         query = this.validateQueryParams(query);
-        let result = Object.keys(query).length ? query : {};
+        const result = Object.keys(query).length ? query : {};
         if (Object.keys(search).length) result["search"] = search;
         return result;
     }
@@ -120,7 +120,7 @@ export default class Endpoint<T extends APIResponse> {
      * @param {bool} array True if the output expects an array, false otherwise
      * @returns API Response
      */
-    protected static makeMalformedRequestResponse(array: boolean = false): Promise<FormattedResponse<any>> {
+    protected static makeMalformedRequestResponse(array = false): Promise<FormattedResponse<any>> {
         return Promise.resolve({
             status: {
                 code: 491,
@@ -138,8 +138,8 @@ export default class Endpoint<T extends APIResponse> {
      * @param {StringMap} keyReplacement Substitutions for key names
      * @returns Flattened object
      */
-    protected static flattenParams(params: PrimitiveMap, separator: string = ",", keyReplacement?: StringMap): StringMap {
-        let result: StringMap = {};
+    protected static flattenParams(params: PrimitiveMap, separator = ",", keyReplacement?: StringMap): StringMap {
+        const result: StringMap = {};
 
         for (const [key, value] of Object.entries(params)) {
             processValue(result, key, value, keyReplacement, separator, []);
@@ -148,7 +148,7 @@ export default class Endpoint<T extends APIResponse> {
         return result;
 
         function processValue(
-            obj: {},
+            obj: StringMap,
             key: string,
             value: PrimitiveType | PrimitiveType[] | PrimitiveMap,
             keyReplacement: StringMap = {},
@@ -176,9 +176,8 @@ export default class Endpoint<T extends APIResponse> {
 
             // Object (recursive)
             keyStack.push(key);
-            for (let [key2, value2] of Object.entries(value)) {
+            for (const [key2, value2] of Object.entries(value))
                 processValue(obj, key2, value2, keyReplacement, separator, keyStack);
-            }
 
             function formatKey(key: string, keyStack = []) {
                 if (keyStack.length == 0) return key;

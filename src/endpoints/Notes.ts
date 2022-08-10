@@ -1,4 +1,5 @@
-import Endpoint from "../components/Endpoint";
+import Endpoint, { SearchParams } from "../components/Endpoint";
+import { FormattedResponse } from "../components/RequestQueue";
 import { APINote } from "../responses/APINote";
 
 export default class NotesEndpoint extends Endpoint<APINote> {
@@ -13,9 +14,10 @@ export default class NotesEndpoint extends Endpoint<APINote> {
         "post_tags": "post_tags_match",
     };
 
+    public find(search: NoteSearchParams = {}): Promise<FormattedResponse<APINote[]>> { return super.find(search); }
 }
 
-interface NoteSearchParams {
+interface NoteSearchParams extends SearchParams {
     // Native
     /// body_matches?: string,
     /// creator_name?: string,
