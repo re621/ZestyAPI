@@ -28,7 +28,6 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
         if (params.post_tag_match && Validation.isString(params.post_tag_match)) result.post_tag_match = params.post_tag_match;
         if (Validation.isBoolean(params.is_hidden)) result.is_hidden = params.is_hidden;
         if (Validation.isBoolean(params.is_sticky)) result.is_sticky = params.is_sticky;
-        if (Validation.isBoolean(params.do_not_bump_post)) result.do_not_bump_post = params.do_not_bump_post;
         if (params.order && Validation.isString(params.order)) result.order = params.order;
 
         // Derived
@@ -54,7 +53,6 @@ interface CommentSearchParams extends SearchParams {
     post_tag_match?: string,
     is_hidden?: boolean,
     is_sticky?: boolean,
-    do_not_bump_post?: boolean,
     order?: CommentSearchOrder,
 
     // Derived
