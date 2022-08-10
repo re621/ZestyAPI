@@ -2,6 +2,24 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "bump",
+            "command": "npm version patch --tag-version-prefix='' -m 'Version %s'",
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "options": {
+                "statusbar": {
+                    "hide": false
+                }
+            }
+        },
+        {
             "label": "build",
             "type": "npm",
             "script": "build",
@@ -57,6 +75,25 @@
                     "hide": false
                 }
             }
-        }
+        },
+        {
+            "label": "eslint",
+            "type": "npm",
+            "script": "eslint",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "options": {
+                "statusbar": {
+                    "hide": false
+                }
+            }
+        },
     ]
 }
