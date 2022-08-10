@@ -2,9 +2,8 @@ name: Build & Publish
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
 jobs:
@@ -22,19 +21,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          
-      - name: Update Version
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          npm version patch
-          git push --tags
+          cache: 'npm'
+      - run: npm ci
+      
+      - name: Test
+        run: npm run test
 
       - name: Build
-        run: |
-          npm ci
-          npx webpack
+        run: npm run build
 
-      - run: npm publish --access restricted
+      - run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
