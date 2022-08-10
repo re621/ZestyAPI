@@ -3,23 +3,16 @@ export default class InitializationError extends Error {
         super(message);
         Object.setPrototypeOf(this, InitializationError.prototype);
     }
-}
 
-export class MalformedConfigError extends InitializationError {
-    public constructor(message?: string) {
-        if (!message) message = "Unknown configuration error";
-        super("MalformedConfigError: " + message);
+    public static UserAgent(): InitializationError {
+        return new InitializationError("UserAgent missing or malformed");
     }
 
-    public static UserAgent(): MalformedConfigError {
-        return new MalformedConfigError("UserAgent missing or malformed");
+    public static Domain(): InitializationError {
+        return new InitializationError("Domain name missing or malformed");
     }
 
-    public static Domain(): MalformedConfigError {
-        return new MalformedConfigError("Domain name missing or malformed");
-    }
-
-    public static Auth(): MalformedConfigError {
-        return new MalformedConfigError("Authentication parameters malformed");
+    public static Auth(): InitializationError {
+        return new InitializationError("Authentication parameters malformed");
     }
 }

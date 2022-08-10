@@ -18,7 +18,7 @@ import UserFeedbacksEndpoint from "./endpoints/UserFeedbacks";
 import UsersEndpoint from "./endpoints/Users";
 import UtilityEndpoint from "./endpoints/Utility";
 import WikiPagesEndpoint from "./endpoints/WikiPages";
-import { MalformedConfigError } from "./error/InitializationError";
+import InitializationError from "./error/InitializationError";
 
 export default class E621 {
 
@@ -50,10 +50,10 @@ export default class E621 {
     public Utility = new UtilityEndpoint(this)
     public WikiPages = new WikiPagesEndpoint(this);
 
-    private constructor(config: APIConfig) {
+    private constructor(config: APIConfig = {}) {
         // User Agent
         if (!config.userAgent || typeof config.userAgent !== "string" || config.userAgent.length > 250)
-            throw MalformedConfigError.UserAgent();
+            throw InitializationError.UserAgent();
         else this.userAgent = config.userAgent;
 
         // Rate Limit
@@ -64,9 +64,9 @@ export default class E621 {
         // Domain
         if (!config.domain) config.domain = "https://e621.net";
         else if (typeof config.domain !== "string")
-            throw MalformedConfigError.Domain();
+            throw InitializationError.Domain();
         try { this.domain = new URL(config.domain).href; }
-        catch { throw MalformedConfigError.Domain(); }
+        catch { throw InitializationError.Domain(); }
 
         // Authentication
         if (config.authToken) this.login(config.authToken);
@@ -89,12 +89,12 @@ export default class E621 {
     public login(auth: AuthToken | AuthLogin): void {
         this.logout();
         if (typeof auth == "string") {
-            if (auth.length > 250) throw MalformedConfigError.Auth();
+            if (auth.length > 250) throw InitializationError.Auth();
             else this.authToken = auth;
         } else {
             if (!auth.username || typeof auth.username !== "string" || auth.username.length > 250
                 || !auth.apiKey || typeof auth.apiKey !== "string" || auth.apiKey.length > 250)
-                throw MalformedConfigError.Auth();
+                throw InitializationError.Auth();
             else this.authLogin = auth;
         }
     }
@@ -169,9 +169,9 @@ if (typeof process === "undefined")
     (window as any).E621 = E621;
 
 interface APIConfig {
-    userAgent: string,
-    rateLimit: 500 | number,
-    domain: "https://e621.net" | "https://e926.net" | string,
+    userAgent?: string,
+    rateLimit?: 500 | number,
+    domain?: "https://e621.net" | "https://e926.net" | string,
 
     authToken?: AuthToken;
     authLogin?: AuthLogin
