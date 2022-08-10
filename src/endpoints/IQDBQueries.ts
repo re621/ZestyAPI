@@ -11,7 +11,7 @@ export default class IQDBQueriesEndpoint extends Endpoint<APIIQDBResponse> {
         try { lookup = this.validateParams({}, query); }
         catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
 
-        return this.api.makeRequest("iqdb_queries.json", { query: Endpoint.flattenParams(lookup), rateLimit: 1000 })
+        return this.api.makeRequest("iqdb_queries.json", { query: Endpoint.flattenParams(lookup), rateLimit: 2000 })
             .then(
                 (response: QueueResponse) => {
                     if (response.data.posts) {
