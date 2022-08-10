@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "test": "jest",
-    "testSome": "jest -t IQDBQueries"
+    "testSome": "jest -t Notes"
   },
   "author": "bitWolfy",
   "license": "GPLv3",
