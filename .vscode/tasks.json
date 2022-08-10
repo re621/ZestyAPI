@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "bump",
-            "type": "shell",
-            "command": "npm version patch --tag-version-prefix='' -m 'Version %s'",
+            "label": "push",
+            "type": "npm",
+            "script": "push",
             "group": {
                 "kind": "none",
                 "isDefault": true
