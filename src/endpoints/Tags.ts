@@ -1,6 +1,5 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
-import Validation from "../components/Validation";
 import { APITag, APITagCategory } from "../responses/APITag";
 
 export default class TagsEndpoint extends Endpoint<APITag> {
@@ -14,6 +13,9 @@ export default class TagsEndpoint extends Endpoint<APITag> {
 
     public Category = APITagCategory;
     protected endpoint = "tags";
+    protected searchParams = [
+        "name", "category", "order", "has_wiki", "has_artist", "hide_empty",    // Native
+    ];
     public find(search: TagSearchParams = {}): Promise<FormattedResponse<APITag[]>> { return super.find(search); }
 
     /**
@@ -42,19 +44,10 @@ export default class TagsEndpoint extends Endpoint<APITag> {
             );
     }
 
-    protected validateSearchParams(params: TagSearchParams = {}): TagSearchParams {
-        const result = super.validateSearchParams(params) as TagSearchParams;
-
-        if (params.name && (Array.isArray(params.name) || Validation.isString(params.name))) result.name = params.name;
-        if (params.category && Validation.isInteger(params.category)) result.category = params.category;
-        if (params.order && Validation.isString(params.order)) result.order = params.order;
-
-        return result;
-    }
-
 }
 
 interface TagSearchParams extends SearchParams {
+    // Native
     name?: string | string[]
     category?: APITagCategory;
     order?: TagSearchOrder;

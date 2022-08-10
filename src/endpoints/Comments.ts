@@ -1,6 +1,5 @@
 import Endpoint, { QueryParams, SearchParams } from "../components/Endpoint";
 import { FormattedResponse } from "../components/RequestQueue";
-import Validation from "../components/Validation";
 import APIComment from "../responses/APIComment";
 
 export default class CommentsEndpoint extends Endpoint<APIComment> {
@@ -15,28 +14,17 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
     */
 
     protected endpoint = "comments";
+    protected searchParams = [
+        "creator_name", "body_matches", "post_tags_match", "is_hidden", "is_sticky", "order",    // Native
+        "id", "post_id", "creator_id",                                                          // Derived
+    ];
+    protected searchParamAliases = {
+        "body": "body_matches",
+        "post_tags": "post_tags_match",
+    }
     public find(search: CommentSearchParams = {}): Promise<FormattedResponse<APIComment[]>> { return super.find(search); }
 
     // TODO get()
-
-    protected validateSearchParams(params: CommentSearchParams = {}): CommentSearchParams {
-        const result = super.validateSearchParams(params) as CommentSearchParams;
-
-        // Native
-        if (params.creator_name && Validation.isString(params.creator_name)) result.creator_name = params.creator_name;
-        if (params.body_matches && Validation.isString(params.body_matches)) result.body_matches = params.body_matches;
-        if (params.post_tag_match && Validation.isString(params.post_tag_match)) result.post_tag_match = params.post_tag_match;
-        if (Validation.isBoolean(params.is_hidden)) result.is_hidden = params.is_hidden;
-        if (Validation.isBoolean(params.is_sticky)) result.is_sticky = params.is_sticky;
-        if (params.order && Validation.isString(params.order)) result.order = params.order;
-
-        // Derived
-        if (params.id && (Array.isArray(params.id) || Validation.isInteger(params.id))) result.id = params.id;
-        if (params.post_id && (Array.isArray(params.post_id) || Validation.isInteger(params.post_id))) result.post_id = params.post_id;
-        if (params.creator_id && Validation.isInteger(params.creator_id)) result.creator_id = params.creator_id;
-
-        return result;
-    }
 
     protected validateQueryParams(params: CommentQueryParams = {}): CommentQueryParams {
         const result = super.validateQueryParams(params) as CommentQueryParams;
@@ -49,8 +37,8 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
 interface CommentSearchParams extends SearchParams {
     // Native
     creator_name?: string,
-    body_matches?: string,
-    post_tag_match?: string,
+    /// body_matches?: string,
+    /// post_tags_match?: string,
     is_hidden?: boolean,
     is_sticky?: boolean,
     order?: CommentSearchOrder,
@@ -59,6 +47,10 @@ interface CommentSearchParams extends SearchParams {
     id?: number | number[],
     post_id?: number | number[],
     creator_id?: number,
+
+    // Aliases
+    body?: string,
+    post_tags?: string,
 }
 
 interface CommentQueryParams extends QueryParams {

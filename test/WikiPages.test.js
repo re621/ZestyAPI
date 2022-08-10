@@ -13,7 +13,7 @@ describe("WikiPages", () => {
         expect(result.data.length).toBe(1);
     });
     test("Fetch pages (body matches)", async () => {
-        const result = await esix.WikiPages.find({ body_matches: "mammal" });
+        const result = await esix.WikiPages.find({ body: "mammal" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
     });

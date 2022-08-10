@@ -7,24 +7,25 @@ describe("Users", () => {
 
     // find()
     test("Find user (by name)", async () => {
-        const result = await esix.Users.find({ name_matches: "bitWolfy" });
+        const result = await esix.Users.find({ name: "bitWolfy" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(1);
     });
     test("Find user (with wildcard)", async () => {
-        const result = await esix.Users.find({ name_matches: "bitWolfy*" });
+        const result = await esix.Users.find({ name: "bitWolfy*" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
     });
     test("Find user (by email)", async () => {
-        const result = await esix.Users.find({ email_matches: "*@pm.me" });
+        const result = await esix.Users.find({ email: "*@pm.me" });
         expect(result.status.code).toBe(403);
         expect(result.data.length).toBe(0);
     });
     test("Find user (by level)", async () => {
-        const result = await esix.Users.find({ level: esix.Users.UserLevel.Janitor });
+        const result = await esix.Users.find({ level: esix.Users.Level.Janitor });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(10);
+        expect(result.data[0].level).toBe(esix.Users.Level.Janitor);
     });
 
     // get()

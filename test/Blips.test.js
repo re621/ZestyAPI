@@ -14,7 +14,7 @@ describe("Blips", () => {
         expect(result.data[0].creator_id).toBe(211960);
     });
     test("Fetch blips (by contents)", async () => {
-        const result = await esix.Blips.find({ body_matches: "@bitWolfy" });
+        const result = await esix.Blips.find({ body: "@bitWolfy" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
     });

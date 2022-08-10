@@ -1,8 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import Validation from "../components/Validation";
-import E621 from "../E621";
 import APIUser, { APIUserLevel } from "../responses/APIUser";
 
 export default class UsersEndpoint extends Endpoint<APIUser> {
@@ -14,11 +12,15 @@ export default class UsersEndpoint extends Endpoint<APIUser> {
 
     */
 
-    public UserLevel = APIUserLevel;
+    public Level = APIUserLevel;
     public SearchOrder = UserSearchOrder;
-
-    constructor(api: E621) {
-        super(api);
+    protected searchParams = [
+        "name_matches", "email_matches", "level", "min_level", "max_level",
+        "can_upload_free", "can_approve_posts", "order",    // Native
+    ];
+    protected searchParamAliases = {
+        "name": "name_matches",
+        "email": "email_matches",
     }
 
     /**
@@ -78,40 +80,22 @@ export default class UsersEndpoint extends Endpoint<APIUser> {
         });
     }
 
-    protected validateSearchParams(params: UserSearchParams = {}): UserSearchParams {
-        const result = super.validateSearchParams(params) as UserSearchParams;
-
-        if (params.name_matches && !Validation.isObject(params.name_matches))
-            result.name_matches = params.name_matches + "";
-        if (params.email_matches && !Validation.isObject(params.email_matches))
-            result.email_matches = params.email_matches + "";
-        if (Array.isArray(params.level) || Validation.isInteger(params.level))
-            result.level = params.level;
-        if (Validation.isInteger(params.min_level))
-            result.min_level = params.min_level;
-        if (Validation.isInteger(params.max_level))
-            result.max_level = params.max_level;
-        if (Validation.isBoolean(result.can_upload_free))
-            result.can_upload_free = params.can_upload_free;
-        if (Validation.isBoolean(params.can_approve_posts))
-            result.can_approve_posts = params.can_approve_posts;
-        if (params.order && Validation.isString(params.order))
-            result.order = params.order;
-
-        return result;
-    }
-
 }
 
 interface UserSearchParams extends SearchParams {
-    name_matches?: string;
-    email_matches?: string;
+    // Native
+    /// name_matches?: string;
+    /// email_matches?: string;
     level?: APIUserLevel | APIUserLevel[];
     min_level?: APIUserLevel;
     max_level?: APIUserLevel;
     can_upload_free?: boolean;
     can_approve_posts?: boolean;
     order?: UserSearchOrder;
+
+    // Alias
+    name?: string;
+    email?: string;
 }
 
 export enum UserSearchOrder {

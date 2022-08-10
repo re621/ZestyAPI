@@ -7,16 +7,10 @@ describe("ForumTopics", () => {
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(40);
     });
-    test("Fetch forum topics (by title / exact)", async () => {
+    test("Fetch forum topics (by title)", async () => {
         const result = await esix.ForumTopics.find({ title: "Tag Projects" });
         expect(result.status.code).toBe(200);
-        expect(result.data.length).toBe(1);
-        expect(result.data[0].id).toBe(23571);
-    });
-    test("Fetch forum topics (by title / fuzzy)", async () => {
-        const result = await esix.ForumTopics.find({ title_matches: "implication" });
-        expect(result.status.code).toBe(200);
-        expect(result.data.length).toBe(40);
+        expect(result.data.length).toBeGreaterThan(1);
     });
     test("Fetch forum topics (sticky)", async () => {
         const result = await esix.ForumTopics.find({ is_sticky: true });
@@ -24,10 +18,10 @@ describe("ForumTopics", () => {
         expect(result.data.length).toBeGreaterThan(1);
     });
     test("Fetch forum topics (by category)", async () => {
-        const result = await esix.ForumTopics.find({ category_id: esix.ForumTopics.ForumCategory.AIBUR });
+        const result = await esix.ForumTopics.find({ category_id: esix.ForumTopics.Category.AIBUR });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(40);
-        expect(result.data[0].category_id = esix.ForumTopics.ForumCategory.AIBUR)
+        expect(result.data[0].category_id = esix.ForumTopics.Category.AIBUR)
     });
 
 });

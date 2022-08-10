@@ -8,13 +8,13 @@ describe("Pools", () => {
         expect(result.data.length).toBe(75);
     });
     test("Fetch pools (by name)", async () => {
-        const result = await esix.Pools.find({ name_matches: "silver soul", order: "post_count" });
+        const result = await esix.Pools.find({ name: "silver soul", order: "post_count" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
         expect(result.data[0].id).toBe(11563);
     });
     test("Fetch pools (by description)", async () => {
-        const result = await esix.Pools.find({ description_matches: "Silver Soul", order: "post_count" });
+        const result = await esix.Pools.find({ description: "Silver Soul", order: "post_count" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
         expect(result.data[0].id).toBe(11563);
@@ -30,5 +30,28 @@ describe("Pools", () => {
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
         expect(result.data[0].is_active).toBe(false);
+    });
+    test("Fetch pools (by ID)", async () => {
+        const result = await esix.Pools.find({ id: 12345 });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBe(1);
+        expect(result.data[0].id).toBe(12345);
+    });
+    test("Fetch pools (by creator ID)", async () => {
+        const result = await esix.Pools.find({ creator_id: 211960 });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBeGreaterThan(1);
+        expect(result.data[0].creator_id).toBe(211960);
+    });
+    test("Fetch pools (by category)", async () => {
+        const result = await esix.Pools.find({ category: esix.Pools.Category.Series });
+        expect(result.status.code).toBe(200);
+        expect(result.data.length).toBe(75);
+        expect(result.data[0].category).toBe(esix.Pools.Category.Series);
+    });
+    test("Fetch pools (404)", async () => {
+        const result = await esix.Pools.find({ creator_name: "abcdefg" });
+        expect(result.status.code).toBe(404);
+        expect(result.data.length).toBe(0);
     });
 });

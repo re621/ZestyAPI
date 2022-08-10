@@ -14,12 +14,12 @@ describe("Comments", () => {
         expect(result.data[0].creator_id).toBe(211960);
     });
     test("Fetch comments (by body match)", async () => {
-        const result = await esix.Comments.find({ body_matches: "permanent" });
+        const result = await esix.Comments.find({ body: "permanent" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
     });
     test("Fetch comments (by tag match)", async () => {
-        const result = await esix.Comments.find({ post_tags_match: "mammal" });
+        const result = await esix.Comments.find({ post_tags: "mammal" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
     });

@@ -8,13 +8,13 @@ describe("ForumPosts", () => {
         expect(result.data.length).toBe(75);
     });
     test("Fetch forum posts (by title)", async () => {
-        const result = await esix.ForumPosts.find({ topic_title_matches: "Tag Projects" });
+        const result = await esix.ForumPosts.find({ title: "Tag Projects" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
         expect(result.data[0].topic_id).toBe(23571);
     });
     test("Fetch forum posts (by body)", async () => {
-        const result = await esix.ForumPosts.find({ body_matches: "Common species among this tag" });
+        const result = await esix.ForumPosts.find({ body: "Common species among this tag" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
         expect(result.data[0].topic_id).toBe(23571);
@@ -26,7 +26,7 @@ describe("ForumPosts", () => {
         expect(result.data[0].creator_id).toBe(211960);
     });
     test("Fetch forum posts (by category)", async () => {
-        const result = await esix.ForumPosts.find({ topic_category_id: esix.ForumPosts.ForumCategory.AIBUR });
+        const result = await esix.ForumPosts.find({ category_id: esix.ForumPosts.Category.AIBUR });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBe(75);
     });
@@ -54,7 +54,7 @@ describe("ForumPosts", () => {
         expect(result.data.length).toBe(0);
     });
     test("Fetch forum posts (404)", async () => {
-        const result = await esix.ForumPosts.find({ topic_title_matches: "This Thread Does Not Exist" });
+        const result = await esix.ForumPosts.find({ title: "This Thread Does Not Exist" });
         expect(result.status.code).toBe(404);
         expect(result.data.length).toBe(0);
     });

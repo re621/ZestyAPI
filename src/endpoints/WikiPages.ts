@@ -1,7 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import Validation from "../components/Validation";
 import { APIWikiPage } from "../responses/APIWikiPage";
 
 export default class WikiPagesEndpoint extends Endpoint<APIWikiPage> {
@@ -12,6 +11,13 @@ export default class WikiPagesEndpoint extends Endpoint<APIWikiPage> {
     - Returns an empty array `[]` instead of an empty object when no results are found
 
     */
+
+    protected searchParams = [
+        "title", "body_matches", "creator_name", "other_names_match", "order",  // Native
+    ];
+    protected searchParamAliases = {
+        "body": "body_matches",
+    };
 
     public async find(search: WikiPageSearchParams = {}): Promise<FormattedResponse<APIWikiPage[]>> {
 
@@ -34,26 +40,20 @@ export default class WikiPagesEndpoint extends Endpoint<APIWikiPage> {
             );
     }
 
-    protected validateSearchParams(params: WikiPageSearchParams = {}): WikiPageSearchParams {
-        const results = super.validateSearchParams(params);
-
-        if (params.title && Validation.isString(params.title)) results.title = params.title;
-        if (params.body_matches && Validation.isString(params.body_matches)) results.body_matches = params.body_matches;
-        if (params.creator_name && Validation.isString(params.creator_name)) results.creator_name = params.creator_name;
-        if (params.other_names_match && Validation.isString(params.other_names_match)) results.other_names_match = params.other_names_match;
-
-        return results;
-    }
 }
 
 interface WikiPageSearchParams extends SearchParams {
+    // Native
     title?: string,
-    body_matches?: string,
+    /// body_matches?: string,
     creator_name?: string,
     other_names_match?: string,
-    // other_names_present?: YesNo,
+    // other_names_present?: YesNo, // TODO
     // hide_deleted?: YesNo,
     order?: WikiPageSearchOrder,
+
+    // Aliases
+    body?: string,
 }
 
 enum WikiPageSearchOrder {

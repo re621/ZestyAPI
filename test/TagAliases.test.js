@@ -3,7 +3,7 @@ const esix = require("./_tests");
 describe("TagAliases", () => {
     // find()
     test("Fetch aliases (by name)", async () => {
-        const result = await esix.TagAliases.find({ name_matches: "mammal" });
+        const result = await esix.TagAliases.find({ name: "mammal" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
         expect(result.data[0].consequent_name).toBe("mammal");
@@ -48,7 +48,7 @@ describe("TagAliases", () => {
 describe("TagImplications", () => {
     // find()
     test("Fetch implications (by name)", async () => {
-        const result = await esix.TagImplications.find({ name_matches: "mammal" });
+        const result = await esix.TagImplications.find({ name: "mammal" });
         expect(result.status.code).toBe(200);
         expect(result.data.length).toBeGreaterThan(1);
         expect(result.data[0].consequent_name).toBe("mammal");

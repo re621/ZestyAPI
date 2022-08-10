@@ -1,7 +1,6 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
-import Validation from "../components/Validation";
 import APIPostEvent, { APIPostEventAction } from "../responses/APIPostEvent";
 
 export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
@@ -13,7 +12,11 @@ export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
 
     */
 
-    public PostEventAction = APIPostEventAction;
+    public Action = APIPostEventAction;
+    protected searchParams = [
+        "post_id", "creator_name", "action",    // Native
+        "id", "creator_id",                     // Derived
+    ]
 
     public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<APIPostEvent[]>> {
 
@@ -36,24 +39,15 @@ export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
             );
     }
 
-    protected validateSearchParams(params: PostEventSearchParams = {}): PostEventSearchParams {
-        const results = super.validateSearchParams(params) as PostEventSearchParams;
-
-        if (params.id && (Array.isArray(params.id) || Validation.isInteger(params.id))) results.id = params.id;
-        if (params.post_id && Validation.isInteger(params.post_id)) results.post_id = params.post_id;
-        if (params.creator_name && Validation.isString(params.creator_name)) results.creator_name = params.creator_name;
-        if (params.creator_id && (Array.isArray(params.creator_id) || Validation.isInteger(params.creator_id))) results.creator_id = params.creator_id;
-        if (params.action && Validation.isString(params.action)) results.action = params.action;
-
-        return results;
-    }
-
 }
 
 interface PostEventSearchParams extends SearchParams {
-    id?: number | number[],
+    // Native
     post_id?: number,
     creator_name?: string,
-    creator_id?: number | number[],
     action?: APIPostEventAction,
+
+    // Derived
+    id?: number | number[],
+    creator_id?: number | number[],
 }

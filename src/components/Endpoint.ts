@@ -9,6 +9,8 @@ export default class Endpoint<T extends APIResponse> {
 
     // Variables used in the inherited `find()` method.
     protected endpoint: string = "unknown";     // determines the URL of the endpoint (without .json)
+    protected searchParams: string[] = [];      // list of permitted search parameters
+    protected searchParamAliases: { [prop: string]: string } = {};
 
     constructor(api: E621) {
         this.api = api;
@@ -66,12 +68,24 @@ export default class Endpoint<T extends APIResponse> {
 
     /**
      * Validates the search parameters for the `find()` methods.  
-     * Does nothing by default. Extend this method to add validation.
      * @param {SearchParams} params Search parameters
      * @returns {SearchParams} Validated parameters
      */
     protected validateSearchParams(params: SearchParams = {}): SearchParams {
-        return {};
+        const results = {};
+
+        // Replace param aliases
+        for (const [antecedent, consequent] of Object.entries(this.searchParamAliases)) {
+            if (params[antecedent]) params[consequent] = params[antecedent];
+            delete params[antecedent];
+        }
+
+        // Find defined permitted params
+        for (const one of this.searchParams)
+            if (typeof params[one] !== "undefined")
+                results[one] = params[one];
+
+        return results;
     }
 
     /**
