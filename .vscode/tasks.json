@@ -3,6 +3,7 @@
     "tasks": [
         {
             "label": "bump",
+            "type": "shell",
             "command": "npm version patch --tag-version-prefix='' -m 'Version %s'",
             "group": {
                 "kind": "none",
