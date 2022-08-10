@@ -22,11 +22,19 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
     protected validateSearchParams(params: CommentSearchParams = {}): CommentSearchParams {
         const result = super.validateSearchParams(params) as CommentSearchParams;
 
+        // Native
         if (params.creator_name && Validation.isString(params.creator_name)) result.creator_name = params.creator_name;
         if (params.body_matches && Validation.isString(params.body_matches)) result.body_matches = params.body_matches;
         if (params.post_tag_match && Validation.isString(params.post_tag_match)) result.post_tag_match = params.post_tag_match;
+        if (Validation.isBoolean(params.is_hidden)) result.is_hidden = params.is_hidden;
         if (Validation.isBoolean(params.is_sticky)) result.is_sticky = params.is_sticky;
+        if (Validation.isBoolean(params.do_not_bump_post)) result.do_not_bump_post = params.do_not_bump_post;
         if (params.order && Validation.isString(params.order)) result.order = params.order;
+
+        // Derived
+        if (params.id && Validation.isInteger(params.id)) result.id = params.id;
+        if (params.post_id && Validation.isInteger(params.post_id)) result.post_id = params.post_id;
+        if (params.creator_id && Validation.isInteger(params.creator_id)) result.creator_id = params.creator_id;
 
         return result;
     }
@@ -40,11 +48,19 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
 }
 
 interface CommentSearchParams extends SearchParams {
+    // Native
     creator_name?: string,
     body_matches?: string,
     post_tag_match?: string,
+    is_hidden?: boolean,
     is_sticky?: boolean,
+    do_not_bump_post?: boolean,
     order?: CommentSearchOrder,
+
+    // Derived
+    id?: number,
+    post_id?: number,
+    creator_id?: number,
 }
 
 interface CommentQueryParams extends QueryParams {

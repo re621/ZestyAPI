@@ -1,6 +1,6 @@
-import APIResponse from "./APIResponse";
+import APIResponse, { APIWarnedMessage } from "./APIResponse";
 
-export default interface APIComment extends APIResponse {
+export default interface APIComment extends APIResponse, APIWarnedMessage {
     id: number;
     created_at: string;
     post_id: number;
