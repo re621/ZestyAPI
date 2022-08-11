@@ -19,12 +19,12 @@ export default class WikiPagesEndpoint extends Endpoint<APIWikiPage> {
         "body": "body_matches",
     };
 
-    public async find(search: WikiPageSearchParams = {}): Promise<FormattedResponse<APIWikiPage[]>> {
+    public async find(search: WikiPageSearchParams = {}): Promise<FormattedResponse<APIWikiPage>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("wiki_pages.json", { query: Endpoint.flattenParams(lookup) })
             .then(

@@ -20,12 +20,12 @@ export default class ForumTopicsEndpoint extends Endpoint<APIForumTopic> {
         "title": "title_matches",   // `title` is valid, but not terribly useful
     };
 
-    public async find(search: ForumTopicSearchParams = {}): Promise<FormattedResponse<APIForumTopic[]>> {
+    public async find(search: ForumTopicSearchParams = {}): Promise<FormattedResponse<APIForumTopic>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("forum_topics.json", { query: Endpoint.flattenParams(lookup) })
             .then(

@@ -28,12 +28,12 @@ export default class UsersEndpoint extends Endpoint<APIUser> {
      * @param {UserSearchParams} params Search parameters
      * @returns {FormattedResponse<APIUser[]>} User data
      */
-    public async find(search: UserSearchParams = {}): Promise<FormattedResponse<APIUser[]>> {
+    public async find(search: UserSearchParams = {}): Promise<FormattedResponse<APIUser>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("users.json", { query: Endpoint.flattenParams(lookup) })
             .then(
@@ -62,7 +62,7 @@ export default class UsersEndpoint extends Endpoint<APIUser> {
 
         return this.api.makeRequest(`users/${id}.json`).then(
             (response: QueueResponse) => Endpoint.formatAPIResponse(response.status, response.data),
-            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, null)
+            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
         );
     }
 

@@ -1,5 +1,5 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import { APITag, APITagCategory } from "../responses/APITag";
 
 export default class TagsEndpoint extends Endpoint<APITag> {
@@ -16,7 +16,7 @@ export default class TagsEndpoint extends Endpoint<APITag> {
     protected searchParams = [
         "name", "category", "order", "has_wiki", "has_artist", "hide_empty",    // Native
     ];
-    public find(search: TagSearchParams = {}): Promise<FormattedResponse<APITag[]>> { return super.find(search); }
+    public find(search: TagSearchParams = {}): Promise<FormattedResponse<APITag>> { return super.find(search); }
 
     /**
      * Fetch user data based on the exact ID or name.  
@@ -32,14 +32,7 @@ export default class TagsEndpoint extends Endpoint<APITag> {
 
         return this.api.makeRequest(`tags/${tag}.json`)
             .then(
-                (response: QueueResponse) => {
-                    if (response.data == null) {
-                        response.status.code = 404;
-                        response.status.message = ResponseStatusMessage.NotFound;
-                        response.data = null;
-                    }
-                    return Endpoint.formatAPIResponse(response.status, response.data);
-                },
+                (response: QueueResponse) => Endpoint.formatAPIResponse(response.status, response.data),
                 (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             );
     }

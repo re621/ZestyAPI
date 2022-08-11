@@ -22,7 +22,7 @@ export default class CommentsEndpoint extends Endpoint<APIComment> {
         "body": "body_matches",
         "post_tags": "post_tags_match",
     }
-    public find(search: CommentSearchParams = {}): Promise<FormattedResponse<APIComment[]>> { return super.find(search); }
+    public find(search: CommentSearchParams = {}): Promise<FormattedResponse<APIComment>> { return super.find(search); }
 
     // TODO get()
 

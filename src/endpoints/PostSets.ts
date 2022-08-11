@@ -18,7 +18,7 @@ export default class PostSetsEndpoint extends Endpoint<APIPostSet> {
         "name", "shortname", "creator_name", "order", "is_public",  // Native
         "id",                                                       // Derived
     ];
-    public find(search: PostSetSearchParams = {}): Promise<FormattedResponse<APIPostSet[]>> { return super.find(search); }
+    public find(search: PostSetSearchParams = {}): Promise<FormattedResponse<APIPostSet>> { return super.find(search); }
 
     // TODO get()
 

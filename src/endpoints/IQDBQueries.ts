@@ -5,11 +5,11 @@ import { APIIQDBResponse } from "../responses/APIIQDBResponse";
 
 export default class IQDBQueriesEndpoint extends Endpoint<APIIQDBResponse> {
 
-    public async find(query: IQDBQueryParams = {}): Promise<FormattedResponse<APIIQDBResponse[]>> {
+    public async find(query: IQDBQueryParams = {}): Promise<FormattedResponse<APIIQDBResponse>> {
 
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams({}, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("iqdb_queries.json", { query: Endpoint.flattenParams(lookup), rateLimit: 2000 })
             .then(

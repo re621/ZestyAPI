@@ -14,7 +14,7 @@ export default class NotesEndpoint extends Endpoint<APINote> {
         "post_tags": "post_tags_match",
     };
 
-    public find(search: NoteSearchParams = {}): Promise<FormattedResponse<APINote[]>> { return super.find(search); }
+    public find(search: NoteSearchParams = {}): Promise<FormattedResponse<APINote>> { return super.find(search); }
 }
 
 interface NoteSearchParams extends SearchParams {

@@ -23,11 +23,11 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
      * @param {PostSearchParams} params Search parameters
      * @returns {FormattedResponse<APIPost[]>} Post data
      */
-    public async find(query: PostQueryParams = {}): Promise<FormattedResponse<APIPost[]>> {
+    public async find(query: PostQueryParams = {}): Promise<FormattedResponse<APIPost>> {
 
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams({}, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("posts.json", { query: Endpoint.flattenParams(lookup, "+") })
             .then(
@@ -61,11 +61,11 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
-                    } else response.data = response.data.post;
+                    } else response.data = [response.data.post];
                     return Endpoint.formatAPIResponse(response.status, response.data);
                 },
                 (error: QueueResponse) => {
-                    return Endpoint.formatAPIResponse(error.status, null);
+                    return Endpoint.formatAPIResponse(error.status, []);
                 }
             );
     }
@@ -76,7 +76,7 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
      * @param ids List of post IDs
      * @returns {FormattedResponse<APIPost[]>} Post data
      */
-    public async getMany(ids: number[]): Promise<FormattedResponse<APIPost[]>> {
+    public async getMany(ids: number[]): Promise<FormattedResponse<APIPost>> {
         if (!Array.isArray(ids))
             return Endpoint.makeMalformedRequestResponse();
         return this.find({ tags: "id:" + ids.join(",") });
@@ -94,12 +94,10 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
                         response.status.code = 404;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
-                    } else response.data = response.data.post;
+                    } else response.data = [response.data.post];
                     return Endpoint.formatAPIResponse(response.status, response.data);
                 },
-                (error: QueueResponse) => {
-                    return Endpoint.formatAPIResponse(error.status, null);
-                }
+                (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
             )
     }
 
@@ -111,7 +109,7 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
      * @param {string} seed Random seed. Optional.
      * @returns {FormattedResponse<APIPost[]>} Post data
      */
-    public async randomMany(query: PostQueryParams = {}, seed?: string): Promise<FormattedResponse<APIPost[]>> {
+    public async randomMany(query: PostQueryParams = {}, seed?: string): Promise<FormattedResponse<APIPost>> {
 
         if (query.tags) {
             if (!Array.isArray(query.tags)) query.tags = query.tags.trim().split(" ").filter(n => n);

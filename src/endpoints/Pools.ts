@@ -28,12 +28,12 @@ export default class PoolsEndpoint extends Endpoint<APIPool> {
      * @param {PoolSearchParams} search Search parameters
      * @returns {FormattedResponse<APIPool[]>} Tag data
      */
-    public find(search: PoolSearchParams = {}): Promise<FormattedResponse<APIPool[]>> {
+    public find(search: PoolSearchParams = {}): Promise<FormattedResponse<APIPool>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("pools.json", { query: Endpoint.flattenParams(lookup) })
             .then(

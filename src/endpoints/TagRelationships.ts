@@ -12,7 +12,7 @@ export default class TagRelationshipsEndpoint extends Endpoint<APITagAlias> {
     protected searchParamAliases = {
         "name": "name_matches",
     };
-    public find(search: TagRelationshipSearchParams = {}): Promise<FormattedResponse<APITagAlias[]>> { return super.find(search); }
+    public find(search: TagRelationshipSearchParams = {}): Promise<FormattedResponse<APITagAlias>> { return super.find(search); }
 
 }
 

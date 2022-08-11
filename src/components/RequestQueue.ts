@@ -141,8 +141,8 @@ export interface QueueResponse {
  * Formatted variant of `QueueResponse`.  
  * Data has been reformatted to fit the APIResponse interface
  */
-export interface FormattedResponse<T extends APIResponse | APIResponse[]> extends QueueResponse {
-    data: T | T[] | null;
+export interface FormattedResponse<T extends APIResponse> extends QueueResponse {
+    data: T[],
 }
 
 /**

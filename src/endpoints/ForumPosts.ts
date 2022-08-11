@@ -22,7 +22,7 @@ export default class ForumPostsEndpoint extends Endpoint<APIForumPost> {
         "title": "topic_title_matches",
         "body": "body_matches",
     }
-    public find(search: ForumPostSearchParams = {}): Promise<FormattedResponse<APIForumPost[]>> { return super.find(search); }
+    public find(search: ForumPostSearchParams = {}): Promise<FormattedResponse<APIForumPost>> { return super.find(search); }
 
 }
 

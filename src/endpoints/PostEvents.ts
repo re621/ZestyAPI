@@ -18,12 +18,12 @@ export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
         "id", "creator_id",                     // Derived
     ]
 
-    public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<APIPostEvent[]>> {
+    public async find(search: PostEventSearchParams = {}): Promise<FormattedResponse<APIPostEvent>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest("post_events.json", { query: Endpoint.flattenParams(lookup) })
             .then(

@@ -42,12 +42,12 @@ describe("Users", () => {
     test("Fetch user (wrong name)", async () => {
         const result = await E621.Users.get("a");
         expect(result.status.code).toBe(404);
-        expect(result.data).toBe(null);
+        expect(result.data.length).toBe(0);
     });
     test("Fetch user (wrong ID)", async () => {
         const result = await E621.Users.get(-451);
         expect(result.status.code).toBe(404);
-        expect(result.data).toBe(null);
+        expect(result.data.length).toBe(0);
     });
 
     // auth

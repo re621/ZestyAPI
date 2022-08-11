@@ -20,7 +20,7 @@ export default class UserFeedbacksEndpoint extends Endpoint<APIUserFeedback> {
     protected searchParamAliases = {
         "body": "body_matches",
     };
-    public find(search: UserFeedbacksSearchParams = {}): Promise<FormattedResponse<APIUserFeedback[]>> { return super.find(search); }
+    public find(search: UserFeedbacksSearchParams = {}): Promise<FormattedResponse<APIUserFeedback>> { return super.find(search); }
 
 }
 

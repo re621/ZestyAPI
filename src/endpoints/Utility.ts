@@ -48,7 +48,7 @@ export default class UtilityEndpoint extends Endpoint<APIResponse> {
     public async test403(): Promise<FormattedResponse<null>> {
         return this.api.makeRequest("test403").then(
             (response: QueueResponse) => Endpoint.formatAPIResponse(response.status, response.data),
-            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, null)
+            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
         )
     }
 
@@ -56,7 +56,7 @@ export default class UtilityEndpoint extends Endpoint<APIResponse> {
     public async test404(): Promise<FormattedResponse<null>> {
         return this.api.makeRequest("test404").then(
             (response: QueueResponse) => Endpoint.formatAPIResponse(response.status, response.data),
-            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, null)
+            (error: QueueResponse) => Endpoint.formatAPIResponse(error.status, [])
         )
     }
 

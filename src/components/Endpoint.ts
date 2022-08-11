@@ -16,12 +16,12 @@ export default class Endpoint<T extends APIResponse> {
         this.api = api;
     }
 
-    public async find(search: SearchParams = {}): Promise<FormattedResponse<T[]>> {
+    public async find(search: SearchParams = {}): Promise<FormattedResponse<T>> {
 
         const query = this.splitQueryParams(search);
         let lookup: PrimitiveMap;
         try { lookup = this.validateParams(search, query); }
-        catch (e) { return Endpoint.makeMalformedRequestResponse(true); }
+        catch (e) { return Endpoint.makeMalformedRequestResponse(); }
 
         return this.api.makeRequest(this.endpoint + ".json", { query: Endpoint.flattenParams(lookup) })
             .then(
@@ -120,14 +120,14 @@ export default class Endpoint<T extends APIResponse> {
      * @param {bool} array True if the output expects an array, false otherwise
      * @returns API Response
      */
-    protected static makeMalformedRequestResponse(array = false): Promise<FormattedResponse<any>> {
+    protected static makeMalformedRequestResponse(): Promise<FormattedResponse<any>> {
         return Promise.resolve({
             status: {
                 code: 491,
                 message: ResponseStatusMessage.MalformedRequest,
                 url: null,
             },
-            data: array ? [] : null,
+            data: [],
         });
     }
 
@@ -198,9 +198,9 @@ export default class Endpoint<T extends APIResponse> {
      * @param {T} data Second part of the API response
      * @returns 
      */
-    protected static formatAPIResponse<T extends APIResponse>(status: ResponseStatus, data: T | T[]): FormattedResponse<T> {
+    protected static formatAPIResponse<T extends APIResponse>(status: ResponseStatus, data: T[]): FormattedResponse<T> {
         if (!status.url) status.url = null;
-        if (!data) data = null;
+        if (!data) data = [];
         return {
             status: status,
             data: data,

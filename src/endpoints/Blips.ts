@@ -19,7 +19,7 @@ export default class BlipsEndpoint extends Endpoint<APIBlip> {
     protected searchParamAliases = {
         "body": "body_matches",
     }
-    public find(search: BlipSearchParams = {}): Promise<FormattedResponse<APIBlip[]>> { return super.find(search); }
+    public find(search: BlipSearchParams = {}): Promise<FormattedResponse<APIBlip>> { return super.find(search); }
 
 }
 

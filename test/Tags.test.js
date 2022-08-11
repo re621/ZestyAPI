@@ -35,6 +35,6 @@ describe("Tags", () => {
     test("Fetch undefined tag", async () => {
         const result = await E621.Tags.get(undefined);
         expect(result.status.code).toBe(491);
-        expect(result.data).toBe(null);
+        expect(result.data.length).toBe(0);
     });
 });

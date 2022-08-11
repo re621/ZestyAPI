@@ -52,12 +52,13 @@ describe("Posts", () => {
     test("Fetch specific post", async () => {
         const result = await E621.Posts.get(12345);
         expect(result.status.code).toBe(200);
-        expect(result.data.id).toBe(12345);
+        expect(result.data.length).toBe(1);
+        expect(result.data[0].id).toBe(12345);
     });
     test("Fetch non-existent post", async () => {
         const result = await E621.Posts.get(1);
         expect(result.status.code).toBe(404);
-        expect(result.data).toBe(null);
+        expect(result.data.length).toBe(0);
     });
 
     // getMany()
@@ -71,7 +72,8 @@ describe("Posts", () => {
     test("Fetch random post", async () => {
         const result = await E621.Posts.random();
         expect(result.status.code).toBe(200);
-        expect(result.data.id).toBeDefined();
+        expect(result.data.length).toBe(1);
+        expect(result.data[0].id).toBeDefined();
     });
 
     // randomMany()
