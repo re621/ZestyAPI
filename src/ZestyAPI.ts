@@ -58,7 +58,7 @@ export default class ZestyAPI {
 
         // Rate Limit
         if (!config.rateLimit || typeof config.rateLimit !== "number" || config.rateLimit < 500)
-            this.rateLimit == 500;
+            this.rateLimit = 500;
         else this.rateLimit = config.rateLimit;
 
         // Domain
@@ -199,7 +199,7 @@ namespace APIQuery {
     export function flatten(input: APIQuery): string[] {
         const result = [];
         for (const [key, value] of Object.entries(input)) {
-            if (value == null || typeof value == "undefined") continue;
+            if (value === null || typeof value == "undefined") continue;
             result.push(key + "=" + value); // TODO URLEncode???
         }
         return result;
