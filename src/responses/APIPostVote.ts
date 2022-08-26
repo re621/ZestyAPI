@@ -12,7 +12,7 @@ export default interface APIPostVote extends APIResponse {
 
 export interface VoteResponse {
     success: boolean;       // If false, an error has occurred, and the rest of the values do not exist
-    action?: -1 | 0 | 1;    // -1 for downvote, 1 for upvote, 0 for unvote
+    our_score?: -1 | 0 | 1; // -1 for downvote, 1 for upvote, 0 for unvote
     score?: number;         // Final score of the post
     up?: number;            // Total number of upvotes 
     down?: number;          // Total number of downvotes
