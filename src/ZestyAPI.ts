@@ -3,6 +3,7 @@ import RequestQueue from "./components/RequestQueue";
 import Util, { PrimitiveType } from "./components/Util";
 import BlipsEndpoint from "./endpoints/Blips";
 import CommentsEndpoint from "./endpoints/Comments";
+import Favorites from "./endpoints/Favortes";
 import ForumPostsEndpoint from "./endpoints/ForumPosts";
 import ForumTopicsEndpoint from "./endpoints/ForumTopics";
 import IQDBQueriesEndpoint from "./endpoints/IQDBQueries";
@@ -35,6 +36,7 @@ export default class ZestyAPI {
     // Endpoint declarations
     public Blips = new BlipsEndpoint(this);
     public Comments = new CommentsEndpoint(this);
+    public Favorites = new Favorites(this);
     public ForumPosts = new ForumPostsEndpoint(this);
     public ForumTopics = new ForumTopicsEndpoint(this);
     public IQDBQueries = new IQDBQueriesEndpoint(this);
@@ -195,7 +197,7 @@ interface AuthLogin {
 }
 
 interface RequestConfig {
-    method?: "GET" | "POST" | "HEAD" | "PATCH",
+    method?: "GET" | "POST" | "HEAD" | "PATCH" | "DELETE",
     query?: APIQuery,
     body?: APIQuery,
     rateLimit?: number,
