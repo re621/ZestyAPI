@@ -4,7 +4,7 @@ import Util from "./components/Util";
 import { PrimitiveType } from "./components/UtilType";
 import BlipsEndpoint from "./endpoints/Blips";
 import CommentsEndpoint from "./endpoints/Comments";
-import Favorites from "./endpoints/Favortes";
+import Favorites from "./endpoints/Favorites";
 import ForumPostsEndpoint from "./endpoints/ForumPosts";
 import ForumTopicsEndpoint from "./endpoints/ForumTopics";
 import IQDBQueriesEndpoint from "./endpoints/IQDBQueries";
