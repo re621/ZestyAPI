@@ -1,10 +1,12 @@
 import UtilID from "./UtilID";
 import UtilMath from "./UtilMath";
+import UtilType, { PrimitiveType } from "./UtilType";
 
 export default class Util {
 
     public static Math = UtilMath;
     public static ID = UtilID;
+    public static Type = UtilType;
 
     /** Returns `true` if the environment is a browser window, `false` if it's a node process */
     public static readonly isBrowser = typeof process === "undefined";
@@ -61,6 +63,3 @@ export default class Util {
     }
 }
 
-export type PrimitiveType = string | boolean | number;
-export type PrimitiveMap = { [prop: string]: PrimitiveType | PrimitiveType[] | PrimitiveMap };
-export type StringMap = { [prop: string]: string };

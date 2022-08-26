@@ -1,6 +1,7 @@
 import Endpoint, { QueryParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import Util from "../components/Util";
+import { PrimitiveMap, SimpleMap } from "../components/UtilType";
 import { MalformedRequestError } from "../error/RequestError";
 import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIPost from "../responses/APIPost";
@@ -122,6 +123,37 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
         return this.find(query);
     }
 
+    public async update(id: number, data: PostUpdateParams): Promise<FormattedResponse<APIPost>> {
+
+        if (!this.api.isAuthSet) {
+            return Endpoint.formatAPIResponse(
+                {
+                    code: ResponseCode.Unauthorized,
+                    message: ResponseStatusMessage.Unauthorized,
+                    url: null,
+                },
+                []
+            )
+        }
+
+        return this.api.makeRequest(`posts/${id}.json`, {
+            method: "POST",
+            body: Util.Type.prefix("post", data),
+        }).then(
+            (response: QueueResponse) => {
+                if (!response.data.post) {
+                    response.status.code = ResponseCode.NotFound;
+                    response.status.message = ResponseStatusMessage.NotFound;
+                    response.data = [];
+                } else response.data = [response.data.post];
+                return Endpoint.formatAPIResponse(response.status, response.data);
+            },
+            (error: QueueResponse) => {
+                return Endpoint.formatAPIResponse(error.status, []);
+            }
+        );
+    }
+
     protected validateQueryParams(params: PostQueryParams = {}): PostQueryParams {
         const result = super.validateQueryParams(params) as PostQueryParams;
 
@@ -138,4 +170,39 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
 
 interface PostQueryParams extends QueryParams {
     tags?: string | string[]
+}
+
+interface PostUpdateParams extends SimpleMap {
+    tag_string?: string,
+    old_tag_string?: string,
+    tag_string_diff?: string,
+
+    rating?: "e" | "q" | "s",
+    old_rating?: "e" | "q" | "s",
+
+    parent_id?: number,
+    old_parent_id?: number,
+
+    source?: string,
+    old_source?: string,
+    source_diff?: string,
+
+    description?: string,
+    old_description?: string,
+
+    edit_reason?: string,
+
+    // Privileged+
+    is_rating_locked?: boolean,
+
+    // Janitor+
+    is_note_locked?: boolean,
+    bg_color?: string,
+
+    // Admin
+    is_status_locked?: boolean,
+    is_comment_disabled?: boolean,
+    locked_tags?: string,
+    hide_from_anonymous?: boolean,
+    hide_from_search_engines?: boolean,
 }

@@ -2,7 +2,8 @@ import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIResponse from "../responses/APIResponse";
 import ZestyAPI from "../ZestyAPI";
 import { FormattedResponse, QueueResponse, ResponseStatus } from "./RequestQueue";
-import Util, { PrimitiveMap, PrimitiveType, StringMap } from "./Util";
+import Util from "./Util";
+import { PrimitiveMap, PrimitiveType, StringMap } from "./UtilType";
 
 export default class Endpoint<T extends APIResponse> {
 

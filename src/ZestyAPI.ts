@@ -1,6 +1,7 @@
 import Logger from "./components/Logger";
 import RequestQueue from "./components/RequestQueue";
-import Util, { PrimitiveType } from "./components/Util";
+import Util from "./components/Util";
+import { PrimitiveType } from "./components/UtilType";
 import BlipsEndpoint from "./endpoints/Blips";
 import CommentsEndpoint from "./endpoints/Comments";
 import Favorites from "./endpoints/Favortes";

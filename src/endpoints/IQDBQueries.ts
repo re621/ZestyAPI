@@ -1,6 +1,6 @@
 import Endpoint, { QueryParams } from "../components/Endpoint";
 import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
-import { PrimitiveMap } from "../components/Util";
+import { PrimitiveMap } from "../components/UtilType";
 import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import { APIIQDBResponse } from "../responses/APIIQDBResponse";
 
