@@ -137,7 +137,7 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
         }
 
         return this.api.makeRequest(`posts/${id}`, {
-            method: "POST",
+            method: "PATCH",
             body: Util.Type.prefix("post", data),
         }).then(
             (response: QueueResponse) => {
