@@ -1,4 +1,5 @@
 import crossFetch, { Request as CrossRequest } from "cross-fetch";
+import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIResponse from "../responses/APIResponse";
 import Logger from "./Logger";
 import Util from "./Util";
@@ -21,7 +22,7 @@ export default class RequestQueue {
      * @param {number} timeout Timeout before the next request
      * @returns 
      */
-    public static add(requestInfo: string, requestInit?: RequestInit, timeout = 500): Promise<any> {
+    public static add(requestInfo: string, requestInit?: RequestInit, timeout = 500): Promise<QueueResponse> {
         // Hard limit on timeout to prevent being throttled
         if (timeout < 500) timeout = 500;
 
@@ -48,9 +49,17 @@ export default class RequestQueue {
         while (currentTask = this.queue.shift()) {
             try {
                 Logger.connect(currentTask.request.url);
-                const response = await wfFetch(currentTask.request as any);
+                let response: Response;
+                try {
+                    response = await wfFetch(currentTask.request as any);
+                } catch (error) {
+                    response = {
+                        status: ResponseCode.FetchError,
+                        statusText: "An error occurred while fetching data",
+                    } as any;
+                }
 
-                if (response.status !== 200) {
+                if (response.status !== ResponseCode.Success) {
                     currentTask.failure({
                         status: {
                             code: response.status,
@@ -104,7 +113,7 @@ export default class RequestQueue {
             } catch (error) {
                 currentTask.failure({
                     status: {
-                        code: 490,
+                        code: ResponseCode.ParsingError,
                         url: currentTask.request.url,
                         message: ResponseStatusMessage.ProcessingError,
                     },
@@ -141,7 +150,10 @@ export interface QueueResponse {
  * Formatted variant of `QueueResponse`.  
  * Data has been reformatted to fit the APIResponse interface
  */
-export interface FormattedResponse<T extends APIResponse> extends QueueResponse {
+export interface FormattedResponse<T extends APIResponse> extends GenericResponse<T> {
+    data: T[],
+}
+export interface GenericResponse<T> extends QueueResponse {
     data: T[],
 }
 
@@ -160,8 +172,3 @@ export interface ResponseStatus {
     extra?: string;
 }
 
-export enum ResponseStatusMessage {
-    MalformedRequest = "malformed request",
-    NotFound = "not found",
-    ProcessingError = "data processing error",
-}

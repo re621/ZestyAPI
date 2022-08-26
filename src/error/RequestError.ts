@@ -18,4 +18,8 @@ export class MalformedRequestError extends RequestError {
     public static TooMany(param: string): MalformedRequestError {
         return new MalformedRequestError("Parameter exceeds search limit: " + param)
     }
+
+    public static NotImplemented(): MalformedRequestError {
+        return new MalformedRequestError("Method not implemented");
+    }
 }

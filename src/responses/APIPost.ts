@@ -48,7 +48,7 @@ export default interface APIPost extends APIResponse {
         rating_locked: boolean;
         deleted: boolean;
     };
-    rating: PostRating;
+    rating: "s" | "q" | "e";
     fav_count: number;
     sources: string[];
     pools: number[];
@@ -92,7 +92,7 @@ export namespace APIPost {
 
 }
 
-
+/*
 // Post Rating
 export enum PostRating {
     Safe = "s",
@@ -132,16 +132,15 @@ export namespace PostRating {
         return null;
     }
 }
+*/
 
 
 // Post Flag
+/*
 export enum PostFlag {
-    /** Post in the mod queue that has not been approved / disapproved yet */
-    Pending = "pending",
-    /** Post that has been flagged for moderation - duplicate, DNP, etc */
-    Flagged = "flagged",
-    /** Post that has been deleted. Indicates that the image file will return `null` */
-    Deleted = "deleted",
+    Pending = "pending",    // Post in the mod queue that has not been approved / disapproved yet
+    Flagged = "flagged",    // Post that has been flagged for moderation - duplicate, DNP, etc
+    Deleted = "deleted",    // Post that has been deleted. Indicates that the image file will return `null`
 
     // Locked
     NoteLocked = "note_locked",
@@ -171,5 +170,5 @@ export namespace PostFlag {
         if (parts.has("pending")) flags.add(PostFlag.Pending);
         return flags;
     }
-
 }
+*/

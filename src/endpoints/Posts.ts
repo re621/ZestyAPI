@@ -1,7 +1,8 @@
 import Endpoint, { QueryParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
 import { MalformedRequestError } from "../error/RequestError";
+import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIPost from "../responses/APIPost";
 
 export default class PostsEndpoint extends Endpoint<APIPost> {
@@ -33,7 +34,7 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
             .then(
                 (response: QueueResponse) => {
                     if (!response.data.posts || response.data.posts.length == 0) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     } else response.data = response.data.posts;
@@ -58,7 +59,7 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
             .then(
                 (response: QueueResponse) => {
                     if (!response.data.post) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     } else response.data = [response.data.post];
@@ -91,7 +92,7 @@ export default class PostsEndpoint extends Endpoint<APIPost> {
             .then(
                 (response: QueueResponse) => {
                     if (!response.data.post) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     } else response.data = [response.data.post];

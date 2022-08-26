@@ -1,6 +1,7 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
+import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIPostEvent, { APIPostEventAction } from "../responses/APIPostEvent";
 
 export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
@@ -29,7 +30,7 @@ export default class PostEventsEndpoint extends Endpoint<APIPostEvent> {
             .then(
                 (response: QueueResponse) => {
                     if (!response.data.post_events || response.data.post_events.length == 0) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     } else response.data = response.data.post_events;

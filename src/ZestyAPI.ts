@@ -11,6 +11,7 @@ import PoolsEndpoint from "./endpoints/Pools";
 import PostEventsEndpoint from "./endpoints/PostEvents";
 import PostsEndpoint from "./endpoints/Posts";
 import PostSets from "./endpoints/PostSets";
+import PostVotes from "./endpoints/PostVotes";
 import TagAliasesEndpoint from "./endpoints/TagAliases";
 import TagImplicationsEndpoint from "./endpoints/TagImplications";
 import TagsEndpoint from "./endpoints/Tags";
@@ -42,6 +43,7 @@ export default class ZestyAPI {
     public Posts = new PostsEndpoint(this);
     public PostEvents = new PostEventsEndpoint(this);
     public PostSets = new PostSets(this);
+    public PostVotes = new PostVotes(this);
     public Tags = new TagsEndpoint(this);
     public TagAliases = new TagAliasesEndpoint(this);
     public TagImplications = new TagImplicationsEndpoint(this);
@@ -106,6 +108,9 @@ export default class ZestyAPI {
 
     public getAuthToken(): AuthToken { return this.authToken; }
     public getAuthLogin(): AuthLogin { return this.authLogin; }
+    public get isAuthSet(): boolean {
+        return typeof this.authToken !== "undefined" || typeof this.authLogin !== "undefined";
+    }
 
     /**
      * Method used to make requests to E621's API.  
@@ -138,9 +143,13 @@ export default class ZestyAPI {
         if (!config.body) config.body = {};
         if (config.method !== "GET") {
             if (this.authToken) config.body["authenticity_token"] = encodeURIComponent(this.authToken);
-            const bodyParams = APIQuery.flatten(config.body);
-            if (bodyParams.length > 0)
-                requestInfo["body"] = bodyParams.join("&");
+            // const bodyParams = APIQuery.flatten(config.body);
+            if (Object.keys(config.body).length > 0) {
+                const data = new FormData();
+                for (const [key, value] of Object.entries(config.body))
+                    data.append(key, value + "");
+                requestInfo["body"] = data;
+            }
         }
 
         // Timeout

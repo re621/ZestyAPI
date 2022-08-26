@@ -1,6 +1,7 @@
 import Endpoint, { SearchParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
+import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIUser, { APIUserLevel } from "../responses/APIUser";
 
 export default class UsersEndpoint extends Endpoint<APIUser> {
@@ -39,7 +40,7 @@ export default class UsersEndpoint extends Endpoint<APIUser> {
             .then(
                 (response: QueueResponse) => {
                     if (!response.data || response.data.length == 0) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     }

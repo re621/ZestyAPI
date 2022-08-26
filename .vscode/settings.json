@@ -4,6 +4,7 @@
         "APIIQDB",
         "blueviolet",
         "dmails",
+        "downvotes",
         "esix",
         "favorited",
         "IQDB",
@@ -12,6 +13,8 @@
         "randseed",
         "regen",
         "rickrolling",
+        "unvote",
+        "upvotes",
         "Wolfy",
         "zestyapi"
     ]

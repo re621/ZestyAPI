@@ -1,6 +1,7 @@
 import Endpoint, { QueryParams } from "../components/Endpoint";
-import { FormattedResponse, QueueResponse, ResponseStatusMessage } from "../components/RequestQueue";
+import { FormattedResponse, QueueResponse } from "../components/RequestQueue";
 import { PrimitiveMap } from "../components/Util";
+import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import { APIIQDBResponse } from "../responses/APIIQDBResponse";
 
 export default class IQDBQueriesEndpoint extends Endpoint<APIIQDBResponse> {
@@ -15,7 +16,7 @@ export default class IQDBQueriesEndpoint extends Endpoint<APIIQDBResponse> {
             .then(
                 (response: QueueResponse) => {
                     if (response.data.posts) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     }

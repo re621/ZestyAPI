@@ -1,6 +1,7 @@
+import { ResponseCode, ResponseStatusMessage } from "../error/ResponseCode";
 import APIResponse from "../responses/APIResponse";
 import ZestyAPI from "../ZestyAPI";
-import { FormattedResponse, QueueResponse, ResponseStatus, ResponseStatusMessage } from "./RequestQueue";
+import { FormattedResponse, QueueResponse, ResponseStatus } from "./RequestQueue";
 import Util, { PrimitiveMap, PrimitiveType, StringMap } from "./Util";
 
 export default class Endpoint<T extends APIResponse> {
@@ -27,7 +28,7 @@ export default class Endpoint<T extends APIResponse> {
             .then(
                 (response: QueueResponse) => {
                     if (response.data[this.endpoint]) {
-                        response.status.code = 404;
+                        response.status.code = ResponseCode.NotFound;
                         response.status.message = ResponseStatusMessage.NotFound;
                         response.data = [];
                     }
@@ -123,7 +124,7 @@ export default class Endpoint<T extends APIResponse> {
     protected static makeMalformedRequestResponse(): Promise<FormattedResponse<any>> {
         return Promise.resolve({
             status: {
-                code: 491,
+                code: ResponseCode.MalformedRequest,
                 message: ResponseStatusMessage.MalformedRequest,
                 url: null,
             },
