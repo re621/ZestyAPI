@@ -17,5 +17,6 @@
         "upvotes",
         "Wolfy",
         "zestyapi"
-    ]
+    ],
+    "deepscan.enable": true
 }
